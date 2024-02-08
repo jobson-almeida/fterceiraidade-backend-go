@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	entity "github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"

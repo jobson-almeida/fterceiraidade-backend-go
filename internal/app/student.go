@@ -6,17 +6,17 @@ import (
 	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	usecaseStudent "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 
 	"github.com/go-chi/chi"
 )
 
 type StudentHandlers struct {
-	CreateStudent *usecaseStudent.CreateStudent
-	SelectStudent *usecaseStudent.SelectStudents
-	ShowStudent   *usecaseStudent.ShowStudent
-	UpdateStudent *usecaseStudent.UpdateStudent
-	DeleteStudent *usecaseStudent.DeleteStudent
+	CreateStudent *usecase.CreateStudent
+	SelectStudent *usecase.SelectStudents
+	ShowStudent   *usecase.ShowStudent
+	UpdateStudent *usecase.UpdateStudent
+	DeleteStudent *usecase.DeleteStudent
 }
 
 type IStudentHandlers interface {
@@ -27,8 +27,8 @@ type IStudentHandlers interface {
 	DeleteStudentHandlers(w http.ResponseWriter, r *http.Request)
 }
 
-func NewStudentHandlers(createStudent *usecaseStudent.CreateStudent, selectStudent *usecaseStudent.SelectStudents, showStudent *usecaseStudent.ShowStudent,
-	updateStudent *usecaseStudent.UpdateStudent, deleteStudent *usecaseStudent.DeleteStudent) IStudentHandlers {
+func NewStudentHandlers(createStudent *usecase.CreateStudent, selectStudent *usecase.SelectStudents, showStudent *usecase.ShowStudent,
+	updateStudent *usecase.UpdateStudent, deleteStudent *usecase.DeleteStudent) IStudentHandlers {
 	return &StudentHandlers{
 		CreateStudent: createStudent,
 		SelectStudent: selectStudent,

@@ -6,17 +6,17 @@ import (
 	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	usecaseQuestion "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 
 	"github.com/go-chi/chi"
 )
 
 type QuestionHandlers struct {
-	CreateQuestion *usecaseQuestion.CreateQuestion
-	SelectQuestion *usecaseQuestion.SelectQuestions
-	ShowQuestion   *usecaseQuestion.ShowQuestion
-	UpdateQuestion *usecaseQuestion.UpdateQuestion
-	DeleteQuestion *usecaseQuestion.DeleteQuestion
+	CreateQuestion *usecase.CreateQuestion
+	SelectQuestion *usecase.SelectQuestions
+	ShowQuestion   *usecase.ShowQuestion
+	UpdateQuestion *usecase.UpdateQuestion
+	DeleteQuestion *usecase.DeleteQuestion
 }
 
 type IQuestionHandlers interface {
@@ -27,8 +27,8 @@ type IQuestionHandlers interface {
 	DeleteQuestionHandlers(w http.ResponseWriter, r *http.Request)
 }
 
-func NewQuestionHandlers(createQuestion *usecaseQuestion.CreateQuestion, selectQuestion *usecaseQuestion.SelectQuestions, showQuestion *usecaseQuestion.ShowQuestion,
-	updateQuestion *usecaseQuestion.UpdateQuestion, deleteQuestion *usecaseQuestion.DeleteQuestion) IQuestionHandlers {
+func NewQuestionHandlers(createQuestion *usecase.CreateQuestion, selectQuestion *usecase.SelectQuestions, showQuestion *usecase.ShowQuestion,
+	updateQuestion *usecase.UpdateQuestion, deleteQuestion *usecase.DeleteQuestion) IQuestionHandlers {
 	return &QuestionHandlers{
 		CreateQuestion: createQuestion,
 		SelectQuestion: selectQuestion,

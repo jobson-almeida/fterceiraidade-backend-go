@@ -1,0 +1,13 @@
+go 1.21.6
+
+use (
+	.
+	./cmd
+	./internal/app
+	./internal/database
+	./internal/dto
+	./internal/entity
+	./internal/repository
+	./internal/routes
+	./internal/usecase
+)

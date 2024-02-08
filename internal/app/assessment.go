@@ -6,18 +6,18 @@ import (
 	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	usecaseAssessment "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 
 	"github.com/go-chi/chi"
 )
 
 // adapter
 type AssessmentHandlers struct {
-	CreateAssessment *usecaseAssessment.CreateAssessment
-	SelectAssessment *usecaseAssessment.SelectAssessments
-	ShowAssessment   *usecaseAssessment.ShowAssessment
-	UpdateAssessment *usecaseAssessment.UpdateAssessment
-	DeleteAssessment *usecaseAssessment.DeleteAssessment
+	CreateAssessment *usecase.CreateAssessment
+	SelectAssessment *usecase.SelectAssessments
+	ShowAssessment   *usecase.ShowAssessment
+	UpdateAssessment *usecase.UpdateAssessment
+	DeleteAssessment *usecase.DeleteAssessment
 }
 
 type IAssessmentHandlers interface {
@@ -28,8 +28,8 @@ type IAssessmentHandlers interface {
 	DeleteAssessmentHandlers(w http.ResponseWriter, r *http.Request)
 }
 
-func NewAssessmentHandlers(createAssessment *usecaseAssessment.CreateAssessment, selectAssessment *usecaseAssessment.SelectAssessments, showAssessment *usecaseAssessment.ShowAssessment,
-	updateAssessment *usecaseAssessment.UpdateAssessment, deleteAssessment *usecaseAssessment.DeleteAssessment) IAssessmentHandlers {
+func NewAssessmentHandlers(createAssessment *usecase.CreateAssessment, selectAssessment *usecase.SelectAssessments, showAssessment *usecase.ShowAssessment,
+	updateAssessment *usecase.UpdateAssessment, deleteAssessment *usecase.DeleteAssessment) IAssessmentHandlers {
 	return &AssessmentHandlers{
 		CreateAssessment: createAssessment,
 		SelectAssessment: selectAssessment,

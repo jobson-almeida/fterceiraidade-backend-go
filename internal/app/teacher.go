@@ -6,17 +6,17 @@ import (
 	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	usecaseTeacher "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 
 	"github.com/go-chi/chi"
 )
 
 type TeacherHandlers struct {
-	CreateTeacher *usecaseTeacher.CreateTeacher
-	SelectTeacher *usecaseTeacher.SelectTeachers
-	ShowTeacher   *usecaseTeacher.ShowTeacher
-	UpdateTeacher *usecaseTeacher.UpdateTeacher
-	DeleteTeacher *usecaseTeacher.DeleteTeacher
+	CreateTeacher *usecase.CreateTeacher
+	SelectTeacher *usecase.SelectTeachers
+	ShowTeacher   *usecase.ShowTeacher
+	UpdateTeacher *usecase.UpdateTeacher
+	DeleteTeacher *usecase.DeleteTeacher
 }
 
 type ITeacherHandlers interface {
@@ -27,8 +27,8 @@ type ITeacherHandlers interface {
 	DeleteTeacherHandlers(w http.ResponseWriter, r *http.Request)
 }
 
-func NewTeacherHandlers(createTeacher *usecaseTeacher.CreateTeacher, selectTeacher *usecaseTeacher.SelectTeachers, showTeacher *usecaseTeacher.ShowTeacher,
-	updateTeacher *usecaseTeacher.UpdateTeacher, deleteTeacher *usecaseTeacher.DeleteTeacher) ITeacherHandlers {
+func NewTeacherHandlers(createTeacher *usecase.CreateTeacher, selectTeacher *usecase.SelectTeachers, showTeacher *usecase.ShowTeacher,
+	updateTeacher *usecase.UpdateTeacher, deleteTeacher *usecase.DeleteTeacher) ITeacherHandlers {
 	return &TeacherHandlers{
 		CreateTeacher: createTeacher,
 		SelectTeacher: selectTeacher,

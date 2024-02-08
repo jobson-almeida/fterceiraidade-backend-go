@@ -6,18 +6,19 @@ import (
 	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	usecaseClassroom "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	//useXcaseClassroom "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 
 	"github.com/go-chi/chi"
 )
 
 // adapter
 type ClassroomHandlers struct {
-	CreateClassroom *usecaseClassroom.CreateClassroom
-	SelectClassroom *usecaseClassroom.SelectClassrooms
-	ShowClassroom   *usecaseClassroom.ShowClassroom
-	UpdateClassroom *usecaseClassroom.UpdateClassroom
-	DeleteClassroom *usecaseClassroom.DeleteClassroom
+	CreateClassroom *usecase.CreateClassroom
+	SelectClassroom *usecase.SelectClassrooms
+	ShowClassroom   *usecase.ShowClassroom
+	UpdateClassroom *usecase.UpdateClassroom
+	DeleteClassroom *usecase.DeleteClassroom
 }
 
 type IClassroomHandlers interface {
@@ -28,8 +29,8 @@ type IClassroomHandlers interface {
 	DeleteClassroomHandlers(w http.ResponseWriter, r *http.Request)
 }
 
-func NewClassroomHandlers(createClassroom *usecaseClassroom.CreateClassroom, selectClassroom *usecaseClassroom.SelectClassrooms, showClassroom *usecaseClassroom.ShowClassroom,
-	updateClassroom *usecaseClassroom.UpdateClassroom, deleteClassroom *usecaseClassroom.DeleteClassroom) IClassroomHandlers {
+func NewClassroomHandlers(createClassroom *usecase.CreateClassroom, selectClassroom *usecase.SelectClassrooms, showClassroom *usecase.ShowClassroom,
+	updateClassroom *usecase.UpdateClassroom, deleteClassroom *usecase.DeleteClassroom) IClassroomHandlers {
 	return &ClassroomHandlers{
 		CreateClassroom: createClassroom,
 		SelectClassroom: selectClassroom,

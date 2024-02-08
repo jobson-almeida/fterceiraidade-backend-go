@@ -6,18 +6,18 @@ import (
 	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	usecaseCourse "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 
 	"github.com/go-chi/chi"
 )
 
 // adapter
 type CourseHandlers struct {
-	CreateCourse *usecaseCourse.CreateCourse
-	SelectCourse *usecaseCourse.SelectCourses
-	ShowCourse   *usecaseCourse.ShowCourse
-	UpdateCourse *usecaseCourse.UpdateCourse
-	DeleteCourse *usecaseCourse.DeleteCourse
+	CreateCourse *usecase.CreateCourse
+	SelectCourse *usecase.SelectCourses
+	ShowCourse   *usecase.ShowCourse
+	UpdateCourse *usecase.UpdateCourse
+	DeleteCourse *usecase.DeleteCourse
 }
 
 type ICourseHandlers interface {
@@ -28,8 +28,8 @@ type ICourseHandlers interface {
 	DeleteCourseHandlers(w http.ResponseWriter, r *http.Request)
 }
 
-func NewCourseHandlers(createCourse *usecaseCourse.CreateCourse, selectCourse *usecaseCourse.SelectCourses, showCourse *usecaseCourse.ShowCourse,
-	updateCourse *usecaseCourse.UpdateCourse, deleteCourse *usecaseCourse.DeleteCourse) ICourseHandlers {
+func NewCourseHandlers(createCourse *usecase.CreateCourse, selectCourse *usecase.SelectCourses, showCourse *usecase.ShowCourse,
+	updateCourse *usecase.UpdateCourse, deleteCourse *usecase.DeleteCourse) ICourseHandlers {
 	return &CourseHandlers{
 		CreateCourse: createCourse,
 		SelectCourse: selectCourse,
