@@ -26,7 +26,6 @@ func (c *CreateStudent) Execute(input dto.StudentInput) error {
 		input.Phone,
 		address,
 	)
-
 	if err != nil {
 		return err
 	}

@@ -28,13 +28,21 @@ func UpdateAssessment() *Assessment {
 }
 
 func NewAssessment(description string, courses pq.StringArray, classrooms pq.StringArray, startDate string, endDate string, quiz []*Quiz) (*Assessment, error) {
+	var questions []*Quiz
+	for _, r := range quiz {
+		questions = append(questions, &Quiz{
+			ID:    r.ID,
+			Value: r.Value,
+		})
+	}
+
 	assessment := &Assessment{
 		Description: description,
 		Courses:     courses,
 		Classrooms:  classrooms,
 		StartDate:   startDate,
 		EndDate:     endDate,
-		Quiz:        quiz,
+		Quiz:        questions,
 	}
 	assessment.ID = uuid.New().String()
 

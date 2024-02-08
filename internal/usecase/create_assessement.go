@@ -4,8 +4,6 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
-
-	"github.com/google/uuid"
 )
 
 type CreateAssessment struct {
@@ -18,7 +16,6 @@ func NewCreateAssessment(repository repository.IAssessmentRepository) *CreateAss
 
 func (c *CreateAssessment) Execute(input *dto.AssessmentInput) error {
 	var quiz []*entity.Quiz
-
 	for _, r := range input.Quiz {
 		quiz = append(quiz, &entity.Quiz{
 			ID:    r.ID,
@@ -26,16 +23,19 @@ func (c *CreateAssessment) Execute(input *dto.AssessmentInput) error {
 		})
 	}
 
-	assessment := entity.NewAssessment()
-	assessment.ID = uuid.New().String()
-	assessment.Description = input.Description
-	assessment.Courses = input.Courses
-	assessment.Classrooms = input.Classrooms
-	assessment.StartDate = input.StartDate
-	assessment.EndDate = input.EndDate
-	assessment.Quiz = quiz
+	assessment, err := entity.NewAssessment(
+		input.Description,
+		input.Courses,
+		input.Classrooms,
+		input.StartDate,
+		input.EndDate,
+		quiz,
+	)
+	if err != nil {
+		return err
+	}
 
-	err := c.AssessmentRepository.Create(assessment)
+	err = c.AssessmentRepository.Create(assessment)
 	if err != nil {
 		return err
 	}
