@@ -1,0 +1,239 @@
+### 
+GET http://localhost:8888/
+      
+### 
+GET http://localhost:8888/courses
+   
+### 
+GET http://localhost:8888/courses/b17d9cf7-1618-4237-9dad-7517a8a3839d
+  
+###  
+POST http://localhost:8888/courses
+Content-Type: application/json
+  
+ {
+   "Name": "Course C",
+   "Description": "Course C Full Advanced",
+   "Image": "/assets/images/blank.png"
+ }
+ 
+ 
+### 
+PUT http://localhost:8888/courses/8d5f1678-a842-407f-8864-87472fb398d0
+Content-Type: application/json
+ 
+ {
+   "Name": "Course B",
+   "Description": "Course B Full Advanced",
+   "Image": "/assets/images/blank.png"
+ }
+  
+### DELETE
+DELETE http://localhost:8888/courses/76b6ccef-3a3f-4a31-b302-21b01c286e12
+
+
+//-------------------------
+
+      
+### 
+GET http://localhost:8888/teachers
+   
+### 
+GET http://localhost:8888/teachers/1acbb0ad-e900-44fa-81da-4e03f76dc77d
+  
+###  
+POST http://localhost:8888/teachers
+Content-Type: application/json
+  
+{
+  "Avatar": "/avatar/blank.png",
+  "Firstname": "Alice",
+	"Lastname": "Brown",
+	"Email": "alice@email.com",
+	"Phone": "+5512345678",
+	"Address": {
+	  "City": "city", 
+	  "State": "state", 
+    "Street": "street"
+  }
+}
+ 
+### 
+PUT http://localhost:8888/teachers/1acbb0ad-e900-44fa-81da-4e03f76dc77d
+Content-Type: application/json
+ 
+ {
+  "Avatar": "/avatar/blank.png",
+  "Firstname": "Alice",
+	"Lastname": "Brown",
+	"Email": "alice@email.com",
+	"Phone": "+5512345678",
+	"Address": {
+	  "City": "city", 
+	  "State": "state", 
+    "Street": "street"
+  }
+}
+  
+### DELETE
+DELETE http://localhost:8888/teachers/046e675f-e364-4fbc-a36d-865010c20fc4
+
+//-------------------------
+       
+###   
+GET http://localhost:8888/students
+   
+### 
+GET http://localhost:8888/students/a40ef0b4-4b77-4c1a-a081-278e13c1e9ed
+  
+### 
+POST http://localhost:8888/students
+Content-Type: application/json
+  
+{
+  "Avatar": "/avatar/blank.png",
+  "Firstname": "Rebecca",
+	"Lastname": "Green",
+	"Email": "rebecca1@email.com",
+	"Phone": "+5512345678",
+	"Address": {
+	  "City": "city", 
+	  "State": "state", 
+    "Street": "street"
+  }
+}  
+ 
+### 
+PUT http://localhost:8888/students/1461498f-00df-4d9f-bfb5-c4c35b903c70
+Content-Type: application/json
+ 
+ {
+  "Avatar": "/avatar/blank.png",
+  "Firstname": "Rebecca",
+	"Lastname": "Green",
+	"Email": "rebecca2@email.com",
+	"Phone": "+55731234567-8",
+	"Address": {
+	  "City": "City", 
+	  "State": "State", 
+    "Street": "Street"
+  }
+} 
+  
+### DELETE
+DELETE http://localhost:8888/students/046e675f-4b77-4c1a-a081-278e13c1e9ed
+
+//-------------------------
+       
+### 
+GET http://localhost:8888/questions
+   
+### 
+GET http://localhost:8888/questions/0def932d-01fa-4e8c-be1b-b4694b6fc115
+  
+### 
+POST http://localhost:8888/questions
+Content-Type: application/json
+  
+{
+  "Questioning": "Pergunta específica sobre",
+	"Type": "objetiva",
+  "Image": "/avatar/blank.png",
+	"Alternatives": ["(a) alternativa a", "(b) alternativa b", "(c) alternativa c"],
+	"Answer": "Resposta sobre a pergunta específica",
+	"Discipline": "Lógica de programação"
+}
+
+### 
+PUT http://localhost:8888/questions/0def932d-01fa-4e8c-be1b-b4694b6fc115
+Content-Type: application/json
+ 
+{
+  "Questioning": "Pergunta específica sobre",
+	"Type": "objetiva",
+  "Image": "",
+	"Alternatives": [
+		"(a) alternativa a",
+		"(b) alternativa b",
+		"(c) alternativa c"
+	],
+	"Answer": "",
+	"Discipline": "Lógica de programação"
+}
+  
+### DELETE
+DELETE http://localhost:8888/questions/046e675f-4b77-4c1a-a081-278e13c1e9ed
+
+//-------------------------
+       
+###  
+GET http://localhost:8888/classrooms
+    
+### 
+GET http://localhost:8888/classrooms/1d6b485a-efca-4e5d-af0e-7c769a0d6874
+  
+### 
+POST http://localhost:8888/classrooms
+Content-Type: application/json
+  
+{
+  "Name": "Classroom C",
+  "Description": "Classroom C Full Advanced",
+  "Course": "b17d9cf7-1618-4237-9dad-7517a8a3839d"
+}
+
+### 
+PUT http://localhost:8888/classrooms/1d6b485a-efca-4e5d-af0e-7c769a0d6874
+Content-Type: application/json
+ 
+{
+  "Name": "Classroom A",
+  "Description": "Classroom A Full Advanced",
+  "Course": "b17d9cf7-1618-4237-9dad-7517a8a3839d"
+}
+  
+### DELETE
+DELETE http://localhost:8888/classrooms/0d6b485a-efca-4e5d-af0e-7c769a0d6874
+	
+//-------------------------
+       
+### 
+GET http://localhost:8888/assessments
+   
+### 
+GET http://localhost:8888/assessments/-a83597cd-3acf-442f-b248-194913d10b52
+     
+###  
+POST http://localhost:8888/assessments
+Content-Type: application/json
+ 
+{ 
+	"Description": "Assessment description",
+	"Courses": ["b17d9cf7-1618-4237-9dad-7517a8a3839d","1d6b485a-efca-4e5d-af0e-7c769a0d6874"],
+	"Classrooms": ["1d6b485a-efca-4e5d-af0e-7c769a0d6874"],
+	"StartDate": "2024-02-03",
+	"EndDate": "2024-02-03",
+	"Quiz": [
+		{
+			"ID": "1d6b485a-efca-4e5d-af0e-7c769a0d6874",
+			"Value": 4
+		},
+		{
+			"ID": "b17d9cf7-1618-4237-9dad-7517a8a3839d",
+			"Value": 7
+		}
+	]
+}	
+
+### 
+PUT http://localhost:8888/assessments/1d6b485a-efca-4e5d-af0e-7c769a0d6874
+Content-Type: application/json
+ 
+{
+  "Name": "Classroom A",
+  "Description": "Classroom A Full Advanced",
+  "Course": "b17d9cf7-1618-4237-9dad-7517a8a3839d"
+}
+  
+### DELETE
+DELETE http://localhost:8888/assessments/0d6b485a-efca-4e5d-af0e-7c769a0d6874
