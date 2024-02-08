@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"github.com/google/uuid"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
@@ -16,18 +15,26 @@ func NewCreateTeacher(repository repository.ITeacherRepository) *CreateTeacher {
 }
 
 func (c *CreateTeacher) Execute(input dto.TeacherInput) error {
-	teacher := entity.NewTeacher()
-	teacher.ID = uuid.New().String()
-	teacher.Avatar = input.Avatar
-	teacher.Firstname = input.Firstname
-	teacher.Lastname = input.Lastname
-	teacher.Email = input.Email
-	teacher.Phone = input.Phone
-	teacher.Address = entity.DetailsAddress{City: input.Address.City, State: input.Address.State, Street: input.Address.Street}
+	address := entity.DetailsAddress{
+		City: input.Address.City, State: input.Address.State, Street: input.Address.Street,
+	}
+	teacher, err := entity.NewTeacher(
+		input.Avatar,
+		input.Firstname,
+		input.Lastname,
+		input.Email,
+		input.Phone,
+		address,
+	)
 
-	err := c.TeacherRepository.Create(teacher)
 	if err != nil {
 		return err
 	}
+
+	err = c.TeacherRepository.Create(teacher)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

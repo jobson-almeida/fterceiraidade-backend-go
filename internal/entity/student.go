@@ -32,7 +32,7 @@ func NewStudent(avatar string, firstname string, lastname string, email string, 
 	}
 	student.ID = uuid.New().String()
 
-	err := student.Prepare()
+	err := util.Validation(student)
 	if err != nil {
 		return nil, err
 	}
@@ -54,18 +54,10 @@ func UpdateStudent(avatar string, firstname string, lastname string, email strin
 		},
 	}
 
-	err := student.Prepare()
+	err := util.Validation(student)
 	if err != nil {
 		return nil, err
 	}
 
 	return student, nil
-}
-
-func (student *Student) Prepare() error {
-	err := util.Validation(student)
-	if err != nil {
-		return err
-	}
-	return nil
 }

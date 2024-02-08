@@ -1,5 +1,10 @@
 package entity
 
+import (
+	"github.com/google/uuid"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
+)
+
 type Teacher struct {
 	Base
 	Avatar    string         `json:"avatar" validate:"required" gorm:"type:varchar(255)"`
@@ -12,10 +17,55 @@ type Teacher struct {
 
 func init() {}
 
-func NewTeacher() *Teacher {
+func NewTeachere() *Teacher {
 	return &Teacher{}
 }
 
-func UpdateTeacher() *Teacher {
+func UpdateTeachere() *Teacher {
 	return &Teacher{}
+}
+
+func NewTeacher(avatar string, firstname string, lastname string, email string, phone string, address DetailsAddress) (*Teacher, error) {
+	teacher := &Teacher{
+		Avatar:    avatar,
+		Firstname: firstname,
+		Lastname:  lastname,
+		Email:     email,
+		Phone:     phone,
+		Address: DetailsAddress{
+			City:   address.City,
+			State:  address.State,
+			Street: address.Street,
+		},
+	}
+	teacher.ID = uuid.New().String()
+
+	err := util.Validation(teacher)
+	if err != nil {
+		return nil, err
+	}
+
+	return teacher, nil
+}
+
+func UpdateTeacher(avatar string, firstname string, lastname string, email string, phone string, address DetailsAddress) (*Teacher, error) {
+	teacher := &Teacher{
+		Avatar:    avatar,
+		Firstname: firstname,
+		Lastname:  lastname,
+		Email:     email,
+		Phone:     phone,
+		Address: DetailsAddress{
+			City:   address.City,
+			State:  address.State,
+			Street: address.Street,
+		},
+	}
+
+	err := util.Validation(teacher)
+	if err != nil {
+		return nil, err
+	}
+
+	return teacher, nil
 }

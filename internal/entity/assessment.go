@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"github.com/google/uuid"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 	"github.com/lib/pq"
 )
 
@@ -16,28 +18,30 @@ type Assessment struct {
 
 func init() {}
 
-func NewAssessment() *Assessment {
+/*
+func cNewAssessment() *Assessment {
 	return &Assessment{}
-}
+}*/
 
 func UpdateAssessment() *Assessment {
 	return &Assessment{}
 }
 
-/*
-func (assessment *Assessment) Prepare() *validator.ErrResponse {
-	res, err := regexp.MatchString("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$", assessment.ID)
-	if err != nil {
-		return validator.ToErrResponse(err)
+func NewAssessment(description string, courses pq.StringArray, classrooms pq.StringArray, startDate string, endDate string, quiz []*Quiz) (*Assessment, error) {
+	assessment := &Assessment{
+		Description: description,
+		Courses:     courses,
+		Classrooms:  classrooms,
+		StartDate:   startDate,
+		EndDate:     endDate,
+		Quiz:        quiz,
 	}
-	if !res {
-		return validator.ToErrResponse(err)
+	assessment.ID = uuid.New().String()
+
+	err := util.Validation(assessment)
+	if err != nil {
+		return nil, err
 	}
 
-	err = validator.New().Struct(assessment)
-	if err != nil {
-		return validator.ToErrResponse(err)
-	}
-	return nil
+	return assessment, nil
 }
-*/

@@ -15,7 +15,6 @@ import (
 	"github.com/go-chi/chi"
 )
 
-// adapter
 type AssessmentHandlers struct {
 	CreateAssessment *usecase.CreateAssessment
 	SelectAssessment *usecase.SelectAssessments
