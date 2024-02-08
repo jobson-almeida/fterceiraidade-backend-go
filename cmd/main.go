@@ -8,8 +8,6 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/routes"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 	_ "github.com/lib/pq"
-
-	handlers "github.com/jobson-almeida/fterceiraidade-backend-go/internal/app"
 )
 
 // @title Swagger Example API

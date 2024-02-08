@@ -2,8 +2,7 @@ package repository
 
 import (
 	"errors"
-
-	entity "github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
+	"fterceiraidade-backend-go/internal/entity"
 
 	"gorm.io/gorm"
 )

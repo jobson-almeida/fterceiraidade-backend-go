@@ -1,20 +1,21 @@
 package routes
 
 import (
+	"fterceiraidade-backend-go/internal/app"
 	"net/http"
 
-	handlers "github.com/jobson-almeida/fterceiraidade-backend-go/internal/app"
+	//"github.com/jobson-almeida/fterceiraidade-backend-go/internal/app"
 
 	"github.com/go-chi/chi"
 )
 
 func Router(
-	courseHandlers handlers.ICourseHandlers,
-	studentHandlers handlers.IStudentHandlers,
-	teacherHandlers handlers.ITeacherHandlers,
-	questionHandlers handlers.IQuestionHandlers,
-	classroomHandlers handlers.IClassroomHandlers,
-	assessmentHandlers handlers.IAssessmentHandlers,
+	courseHandlers app.ICourseHandlers,
+	studentHandlers app.IStudentHandlers,
+	teacherHandlers app.ITeacherHandlers,
+	questionHandlers app.IQuestionHandlers,
+	classroomHandlers app.IClassroomHandlers,
+	assessmentHandlers app.IAssessmentHandlers,
 ) *chi.Mux {
 	r := chi.NewRouter()
 

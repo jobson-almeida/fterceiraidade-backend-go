@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	entity "github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
-	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
+	"fterceiraidade-backend-go/internal/dto"
+	"fterceiraidade-backend-go/internal/entity"
+	"fterceiraidade-backend-go/internal/repository"
 )
 
 type ShowTeacher struct {

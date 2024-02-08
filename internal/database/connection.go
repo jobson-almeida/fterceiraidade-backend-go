@@ -2,9 +2,10 @@ package database
 
 import (
 	"fmt"
+	"fterceiraidade-backend-go/internal/entity"
 	"os"
 
-	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
+	//"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
