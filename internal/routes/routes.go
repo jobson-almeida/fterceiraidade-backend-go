@@ -1,21 +1,19 @@
 package routes
 
 import (
-	"fterceiraidade-backend-go/internal/app"
 	"net/http"
 
-	//"github.com/jobson-almeida/fterceiraidade-backend-go/internal/app"
-
 	"github.com/go-chi/chi"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/app/handler"
 )
 
 func Router(
-	courseHandlers app.ICourseHandlers,
-	studentHandlers app.IStudentHandlers,
-	teacherHandlers app.ITeacherHandlers,
-	questionHandlers app.IQuestionHandlers,
-	classroomHandlers app.IClassroomHandlers,
-	assessmentHandlers app.IAssessmentHandlers,
+	courseHandlers handler.ICourseHandlers,
+	studentHandlers handler.IStudentHandlers,
+	teacherHandlers handler.ITeacherHandlers,
+	questionHandlers handler.IQuestionHandlers,
+	classroomHandlers handler.IClassroomHandlers,
+	assessmentHandlers handler.IAssessmentHandlers,
 ) *chi.Mux {
 	r := chi.NewRouter()
 
@@ -24,68 +22,68 @@ func Router(
 	})
 
 	r.Route("/courses", func(r chi.Router) {
-		r.Get("/", courseHandlers.SelectCoursesHandlers)
-		r.Post("/", courseHandlers.CreateCourseHandlers)
+		r.Get("/", courseHandlers.SelectCoursesHandler)
+		r.Post("/", courseHandlers.CreateCourseHandler)
 
 		r.Route("/{id}", func(r chi.Router) {
-			r.Get("/", courseHandlers.ShowCourseHandlers)
-			r.Put("/", courseHandlers.UpdateCourseHandlers)
-			r.Delete("/", courseHandlers.DeleteCourseHandlers)
+			r.Get("/", courseHandlers.ShowCourseHandler)
+			r.Put("/", courseHandlers.UpdateCourseHandler)
+			r.Delete("/", courseHandlers.DeleteCourseHandler)
 		})
 	})
 
 	r.Route("/students", func(r chi.Router) {
-		r.Get("/", studentHandlers.SelectStudentsHandlers)
-		r.Post("/", studentHandlers.CreateStudentHandlers)
+		r.Get("/", studentHandlers.SelectStudentsHandler)
+		r.Post("/", studentHandlers.CreateStudentHandler)
 
 		r.Route("/{id}", func(r chi.Router) {
-			r.Get("/", studentHandlers.ShowStudentHandlers)
-			r.Put("/", studentHandlers.UpdateStudentHandlers)
-			r.Delete("/", studentHandlers.DeleteStudentHandlers)
+			r.Get("/", studentHandlers.ShowStudentHandler)
+			r.Put("/", studentHandlers.UpdateStudentHandler)
+			r.Delete("/", studentHandlers.DeleteStudentHandler)
 		})
 	})
 
 	r.Route("/teachers", func(r chi.Router) {
-		r.Get("/", teacherHandlers.SelectTeachersHandlers)
-		r.Post("/", teacherHandlers.CreateTeacherHandlers)
+		r.Get("/", teacherHandlers.SelectTeachersHandler)
+		r.Post("/", teacherHandlers.CreateTeacherHandler)
 
 		r.Route("/{id}", func(r chi.Router) {
-			r.Get("/", teacherHandlers.ShowTeacherHandlers)
-			r.Put("/", teacherHandlers.UpdateTeacherHandlers)
-			r.Delete("/", teacherHandlers.DeleteTeacherHandlers)
+			r.Get("/", teacherHandlers.ShowTeacherHandler)
+			r.Put("/", teacherHandlers.UpdateTeacherHandler)
+			r.Delete("/", teacherHandlers.DeleteTeacherHandler)
 		})
 	})
 
 	r.Route("/questions", func(r chi.Router) {
-		r.Get("/", questionHandlers.SelectQuestionsHandlers)
-		r.Post("/", questionHandlers.CreateQuestionHandlers)
+		r.Get("/", questionHandlers.SelectQuestionsHandler)
+		r.Post("/", questionHandlers.CreateQuestionHandler)
 
 		r.Route("/{id}", func(r chi.Router) {
-			r.Get("/", questionHandlers.ShowQuestionHandlers)
-			r.Put("/", questionHandlers.UpdateQuestionHandlers)
-			r.Delete("/", questionHandlers.DeleteQuestionHandlers)
+			r.Get("/", questionHandlers.ShowQuestionHandler)
+			r.Put("/", questionHandlers.UpdateQuestionHandler)
+			r.Delete("/", questionHandlers.DeleteQuestionHandler)
 		})
 	})
 
 	r.Route("/classrooms", func(r chi.Router) {
-		r.Get("/", classroomHandlers.SelectClassroomsHandlers)
-		r.Post("/", classroomHandlers.CreateClassroomHandlers)
+		r.Get("/", classroomHandlers.SelectClassroomsHandler)
+		r.Post("/", classroomHandlers.CreateClassroomHandler)
 
 		r.Route("/{id}", func(r chi.Router) {
-			r.Get("/", classroomHandlers.ShowClassroomHandlers)
-			r.Put("/", classroomHandlers.UpdateClassroomHandlers)
-			r.Delete("/", classroomHandlers.DeleteClassroomHandlers)
+			r.Get("/", classroomHandlers.ShowClassroomHandler)
+			r.Put("/", classroomHandlers.UpdateClassroomHandler)
+			r.Delete("/", classroomHandlers.DeleteClassroomHandler)
 		})
 	})
 
 	r.Route("/assessments", func(r chi.Router) {
-		r.Get("/", assessmentHandlers.SelectAssessmentsHandlers)
-		r.Post("/", assessmentHandlers.CreateAssessmentHandlers)
+		r.Get("/", assessmentHandlers.SelectAssessmentsHandler)
+		r.Post("/", assessmentHandlers.CreateAssessmentHandler)
 
 		r.Route("/{id}", func(r chi.Router) {
-			r.Get("/", assessmentHandlers.ShowAssessmentHandlers)
-			r.Put("/", assessmentHandlers.UpdateAssessmentHandlers)
-			r.Delete("/", assessmentHandlers.DeleteAssessmentHandlers)
+			r.Get("/", assessmentHandlers.ShowAssessmentHandler)
+			r.Put("/", assessmentHandlers.UpdateAssessmentHandler)
+			r.Delete("/", assessmentHandlers.DeleteAssessmentHandler)
 		})
 	})
 

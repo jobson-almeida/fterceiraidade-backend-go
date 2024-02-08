@@ -1,4 +1,4 @@
-package app
+package handler
 
 import (
 	"encoding/json"
@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
-	//useXcaseClassroom "github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
 
 	"github.com/go-chi/chi"
@@ -22,11 +21,11 @@ type ClassroomHandlers struct {
 }
 
 type IClassroomHandlers interface {
-	CreateClassroomHandlers(w http.ResponseWriter, r *http.Request)
-	SelectClassroomsHandlers(w http.ResponseWriter, r *http.Request)
-	ShowClassroomHandlers(w http.ResponseWriter, r *http.Request)
-	UpdateClassroomHandlers(w http.ResponseWriter, r *http.Request)
-	DeleteClassroomHandlers(w http.ResponseWriter, r *http.Request)
+	CreateClassroomHandler(w http.ResponseWriter, r *http.Request)
+	SelectClassroomsHandler(w http.ResponseWriter, r *http.Request)
+	ShowClassroomHandler(w http.ResponseWriter, r *http.Request)
+	UpdateClassroomHandler(w http.ResponseWriter, r *http.Request)
+	DeleteClassroomHandler(w http.ResponseWriter, r *http.Request)
 }
 
 func NewClassroomHandlers(createClassroom *usecase.CreateClassroom, selectClassroom *usecase.SelectClassrooms, showClassroom *usecase.ShowClassroom,
@@ -40,7 +39,7 @@ func NewClassroomHandlers(createClassroom *usecase.CreateClassroom, selectClassr
 	}
 }
 
-func (c *ClassroomHandlers) CreateClassroomHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *ClassroomHandlers) CreateClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.ClassroomInput
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
@@ -56,7 +55,7 @@ func (c *ClassroomHandlers) CreateClassroomHandlers(w http.ResponseWriter, r *ht
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (c *ClassroomHandlers) SelectClassroomsHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *ClassroomHandlers) SelectClassroomsHandler(w http.ResponseWriter, r *http.Request) {
 	output, err := c.SelectClassroom.Execute()
 
 	if err != nil {
@@ -73,7 +72,7 @@ func (c *ClassroomHandlers) SelectClassroomsHandlers(w http.ResponseWriter, r *h
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *ClassroomHandlers) ShowClassroomHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *ClassroomHandlers) ShowClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 	output, err := c.ShowClassroom.Execute(input)
@@ -92,7 +91,7 @@ func (c *ClassroomHandlers) ShowClassroomHandlers(w http.ResponseWriter, r *http
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *ClassroomHandlers) UpdateClassroomHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *ClassroomHandlers) UpdateClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 
@@ -122,7 +121,7 @@ func (c *ClassroomHandlers) UpdateClassroomHandlers(w http.ResponseWriter, r *ht
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (c *ClassroomHandlers) DeleteClassroomHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *ClassroomHandlers) DeleteClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 

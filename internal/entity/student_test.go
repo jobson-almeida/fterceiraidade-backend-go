@@ -1,10 +1,9 @@
 package entity_test
 
 import (
-	"fterceiraidade-backend-go/internal/entity"
 	"testing"
 
-	//"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 
 	"github.com/stretchr/testify/require"
 )

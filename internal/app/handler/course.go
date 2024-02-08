@@ -1,4 +1,4 @@
-package app
+package handler
 
 import (
 	"encoding/json"
@@ -11,41 +11,43 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type QuestionHandlers struct {
-	CreateQuestion *usecase.CreateQuestion
-	SelectQuestion *usecase.SelectQuestions
-	ShowQuestion   *usecase.ShowQuestion
-	UpdateQuestion *usecase.UpdateQuestion
-	DeleteQuestion *usecase.DeleteQuestion
+// adapter
+type CourseHandlers struct {
+	CreateCourse *usecase.CreateCourse
+	SelectCourse *usecase.SelectCourses
+	ShowCourse   *usecase.ShowCourse
+	UpdateCourse *usecase.UpdateCourse
+	DeleteCourse *usecase.DeleteCourse
 }
 
-type IQuestionHandlers interface {
-	CreateQuestionHandlers(w http.ResponseWriter, r *http.Request)
-	SelectQuestionsHandlers(w http.ResponseWriter, r *http.Request)
-	ShowQuestionHandlers(w http.ResponseWriter, r *http.Request)
-	UpdateQuestionHandlers(w http.ResponseWriter, r *http.Request)
-	DeleteQuestionHandlers(w http.ResponseWriter, r *http.Request)
+type ICourseHandlers interface {
+	CreateCourseHandler(w http.ResponseWriter, r *http.Request)
+	SelectCoursesHandler(w http.ResponseWriter, r *http.Request)
+	ShowCourseHandler(w http.ResponseWriter, r *http.Request)
+	UpdateCourseHandler(w http.ResponseWriter, r *http.Request)
+	DeleteCourseHandler(w http.ResponseWriter, r *http.Request)
 }
 
-func NewQuestionHandlers(createQuestion *usecase.CreateQuestion, selectQuestion *usecase.SelectQuestions, showQuestion *usecase.ShowQuestion,
-	updateQuestion *usecase.UpdateQuestion, deleteQuestion *usecase.DeleteQuestion) IQuestionHandlers {
-	return &QuestionHandlers{
-		CreateQuestion: createQuestion,
-		SelectQuestion: selectQuestion,
-		ShowQuestion:   showQuestion,
-		UpdateQuestion: updateQuestion,
-		DeleteQuestion: deleteQuestion,
+func NewCourseHandlers(createCourse *usecase.CreateCourse, selectCourse *usecase.SelectCourses, showCourse *usecase.ShowCourse,
+	updateCourse *usecase.UpdateCourse, deleteCourse *usecase.DeleteCourse) ICourseHandlers {
+	return &CourseHandlers{
+		CreateCourse: createCourse,
+		SelectCourse: selectCourse,
+		ShowCourse:   showCourse,
+		UpdateCourse: updateCourse,
+		DeleteCourse: deleteCourse,
 	}
 }
 
-func (c *QuestionHandlers) CreateQuestionHandlers(w http.ResponseWriter, r *http.Request) {
-	var input dto.QuestionInput
+func (c *CourseHandlers) CreateCourseHandler(w http.ResponseWriter, r *http.Request) {
+	var input dto.CourseInput
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err = c.CreateQuestion.Execute(input)
+
+	err = c.CreateCourse.Execute(input)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -54,8 +56,8 @@ func (c *QuestionHandlers) CreateQuestionHandlers(w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (c *QuestionHandlers) SelectQuestionsHandlers(w http.ResponseWriter, r *http.Request) {
-	output, err := c.SelectQuestion.Execute()
+func (c *CourseHandlers) SelectCoursesHandler(w http.ResponseWriter, r *http.Request) {
+	output, err := c.SelectCourse.Execute()
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -71,10 +73,10 @@ func (c *QuestionHandlers) SelectQuestionsHandlers(w http.ResponseWriter, r *htt
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *QuestionHandlers) ShowQuestionHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *CourseHandlers) ShowCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
-	output, err := c.ShowQuestion.Execute(input)
+	output, err := c.ShowCourse.Execute(input)
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
@@ -90,11 +92,11 @@ func (c *QuestionHandlers) ShowQuestionHandlers(w http.ResponseWriter, r *http.R
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *QuestionHandlers) UpdateQuestionHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *CourseHandlers) UpdateCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 
-	_, err := c.ShowQuestion.Execute(input)
+	_, err := c.ShowCourse.Execute(input)
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
@@ -106,13 +108,13 @@ func (c *QuestionHandlers) UpdateQuestionHandlers(w http.ResponseWriter, r *http
 		}
 	}
 
-	var question dto.UpdateQuestionInput
-	err = json.NewDecoder(r.Body).Decode(&question)
+	var course dto.UpdateCourseInput
+	err = json.NewDecoder(r.Body).Decode(&course)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err = c.UpdateQuestion.Execute(input, question)
+	err = c.UpdateCourse.Execute(input, course)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -120,11 +122,11 @@ func (c *QuestionHandlers) UpdateQuestionHandlers(w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (c *QuestionHandlers) DeleteQuestionHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *CourseHandlers) DeleteCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 
-	_, err := c.ShowQuestion.Execute(input)
+	_, err := c.ShowCourse.Execute(input)
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
@@ -136,7 +138,7 @@ func (c *QuestionHandlers) DeleteQuestionHandlers(w http.ResponseWriter, r *http
 		}
 	}
 
-	err = c.DeleteQuestion.Execute(input)
+	err = c.DeleteCourse.Execute(input)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

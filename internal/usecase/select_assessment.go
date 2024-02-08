@@ -1,8 +1,9 @@
 package usecase
 
 import (
-	"fterceiraidade-backend-go/internal/dto"
-	"fterceiraidade-backend-go/internal/repository"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
+
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 )
 
 type SelectAssessments struct {

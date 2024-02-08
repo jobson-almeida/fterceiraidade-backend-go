@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/app/handler"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/database"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/routes"
@@ -33,7 +34,7 @@ func main() {
 	showCourse := usecase.NewShowCourse(repositoryCourse)
 	updateCourse := usecase.NewUpdateCourse(repositoryCourse)
 	deleteCourse := usecase.NewDeleteCourse(repositoryCourse)
-	courseHandlers := handlers.NewCourseHandlers(createCourse, selectCourses, showCourse, updateCourse, deleteCourse)
+	courseHandlers := handler.NewCourseHandlers(createCourse, selectCourses, showCourse, updateCourse, deleteCourse)
 
 	repositoryTeacher := repository.NewTeacherRepository(&db)
 	createTeacher := usecase.NewCreateTeacher(repositoryTeacher)
@@ -41,7 +42,7 @@ func main() {
 	showTeacher := usecase.NewShowTeacher(repositoryTeacher)
 	updateTeacher := usecase.NewUpdateTeacher(repositoryTeacher)
 	deleteTeacher := usecase.NewDeleteTeacher(repositoryTeacher)
-	teacherHandlers := handlers.NewTeacherHandlers(createTeacher, selectTeachers, showTeacher, updateTeacher, deleteTeacher)
+	teacherHandlers := handler.NewTeacherHandlers(createTeacher, selectTeachers, showTeacher, updateTeacher, deleteTeacher)
 
 	repositoryStudent := repository.NewStudentRepository(&db)
 	createStudent := usecase.NewCreateStudent(repositoryStudent)
@@ -49,7 +50,7 @@ func main() {
 	showStudent := usecase.NewShowStudent(repositoryStudent)
 	updateStudent := usecase.NewUpdateStudent(repositoryStudent)
 	deleteStudent := usecase.NewDeleteStudent(repositoryStudent)
-	studentHandlers := handlers.NewStudentHandlers(createStudent, selectStudents, showStudent, updateStudent, deleteStudent)
+	studentHandlers := handler.NewStudentHandlers(createStudent, selectStudents, showStudent, updateStudent, deleteStudent)
 
 	repositoryQuestion := repository.NewQuestionRepository(&db)
 	createQuestion := usecase.NewCreateQuestion(repositoryQuestion)
@@ -57,7 +58,7 @@ func main() {
 	showQuestion := usecase.NewShowQuestion(repositoryQuestion)
 	updateQuestion := usecase.NewUpdateQuestion(repositoryQuestion)
 	deleteQuestion := usecase.NewDeleteQuestion(repositoryQuestion)
-	questionHandlers := handlers.NewQuestionHandlers(createQuestion, selectQuestions, showQuestion, updateQuestion, deleteQuestion)
+	questionHandlers := handler.NewQuestionHandlers(createQuestion, selectQuestions, showQuestion, updateQuestion, deleteQuestion)
 
 	repositoryClassroom := repository.NewClassroomRepository(&db)
 	createClassroom := usecase.NewCreateClassroom(repositoryClassroom)
@@ -65,7 +66,7 @@ func main() {
 	showClassroom := usecase.NewShowClassroom(repositoryClassroom)
 	updateClassroom := usecase.NewUpdateClassroom(repositoryClassroom)
 	deleteClassroom := usecase.NewDeleteClassroom(repositoryClassroom)
-	classroomHandlers := handlers.NewClassroomHandlers(createClassroom, selectClassrooms, showClassroom, updateClassroom, deleteClassroom)
+	classroomHandlers := handler.NewClassroomHandlers(createClassroom, selectClassrooms, showClassroom, updateClassroom, deleteClassroom)
 
 	repositoryAssessment := repository.NewAssessmentRepository(&db)
 	createAssessment := usecase.NewCreateAssessment(repositoryAssessment)
@@ -73,7 +74,7 @@ func main() {
 	showAssessment := usecase.NewShowAssessment(repositoryAssessment)
 	updateAssessment := usecase.NewUpdateAssessment(repositoryAssessment)
 	deleteAssessment := usecase.NewDeleteAssessment(repositoryAssessment)
-	assessmentHandlers := handlers.NewAssessmentHandlers(createAssessment, selectAssessments, showAssessment, updateAssessment, deleteAssessment)
+	assessmentHandlers := handler.NewAssessmentHandlers(createAssessment, selectAssessments, showAssessment, updateAssessment, deleteAssessment)
 
 	r := routes.Router(courseHandlers, studentHandlers, teacherHandlers, questionHandlers, classroomHandlers, assessmentHandlers)
 

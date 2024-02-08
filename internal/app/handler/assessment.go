@@ -1,7 +1,11 @@
-package app
+package handler
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"strings"
 
@@ -21,11 +25,11 @@ type AssessmentHandlers struct {
 }
 
 type IAssessmentHandlers interface {
-	CreateAssessmentHandlers(w http.ResponseWriter, r *http.Request)
-	SelectAssessmentsHandlers(w http.ResponseWriter, r *http.Request)
-	ShowAssessmentHandlers(w http.ResponseWriter, r *http.Request)
-	UpdateAssessmentHandlers(w http.ResponseWriter, r *http.Request)
-	DeleteAssessmentHandlers(w http.ResponseWriter, r *http.Request)
+	CreateAssessmentHandler(w http.ResponseWriter, r *http.Request)
+	SelectAssessmentsHandler(w http.ResponseWriter, r *http.Request)
+	ShowAssessmentHandler(w http.ResponseWriter, r *http.Request)
+	UpdateAssessmentHandler(w http.ResponseWriter, r *http.Request)
+	DeleteAssessmentHandler(w http.ResponseWriter, r *http.Request)
 }
 
 func NewAssessmentHandlers(createAssessment *usecase.CreateAssessment, selectAssessment *usecase.SelectAssessments, showAssessment *usecase.ShowAssessment,
@@ -39,7 +43,7 @@ func NewAssessmentHandlers(createAssessment *usecase.CreateAssessment, selectAss
 	}
 }
 
-/*
+// ------------------------------------
 type malformedRequest struct {
 	status int
 	msg    string
@@ -75,7 +79,8 @@ func decodeJSONBody(w http.ResponseWriter, r *http.Request, dst interface{}) err
 			return &malformedRequest{status: http.StatusBadRequest, msg: msg}
 
 		case errors.Is(err, io.ErrUnexpectedEOF):
-			msg := fmt.Sprintf("Request body contains badly-formed JSON")
+			//msg := fmt.Sprintf("Request body contains badly-formed JSON %s", io.ErrUnexpectedEOF)
+			msg := "Request body contains badly-formed JSON"
 			return &malformedRequest{status: http.StatusBadRequest, msg: msg}
 
 		case errors.As(err, &unmarshalTypeError):
@@ -106,9 +111,11 @@ func decodeJSONBody(w http.ResponseWriter, r *http.Request, dst interface{}) err
 		return &malformedRequest{status: http.StatusBadRequest, msg: msg}
 	}
 	return nil
-}*/
+}
 
-func (c *AssessmentHandlers) CreateAssessmentHandlers(w http.ResponseWriter, r *http.Request) {
+//----------------------------
+
+func (c *AssessmentHandlers) CreateAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.AssessmentInput
 
 	/*	err := decodeJSONBody(w, r, &input)
@@ -138,7 +145,7 @@ func (c *AssessmentHandlers) CreateAssessmentHandlers(w http.ResponseWriter, r *
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (c *AssessmentHandlers) SelectAssessmentsHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *AssessmentHandlers) SelectAssessmentsHandler(w http.ResponseWriter, r *http.Request) {
 	output, err := c.SelectAssessment.Execute()
 
 	if err != nil {
@@ -155,7 +162,7 @@ func (c *AssessmentHandlers) SelectAssessmentsHandlers(w http.ResponseWriter, r 
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *AssessmentHandlers) ShowAssessmentHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *AssessmentHandlers) ShowAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 
@@ -175,7 +182,7 @@ func (c *AssessmentHandlers) ShowAssessmentHandlers(w http.ResponseWriter, r *ht
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *AssessmentHandlers) UpdateAssessmentHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *AssessmentHandlers) UpdateAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 
@@ -191,12 +198,38 @@ func (c *AssessmentHandlers) UpdateAssessmentHandlers(w http.ResponseWriter, r *
 		}
 	}
 
-	var assessment dto.UpdateAssessmentInput
-	err = json.NewDecoder(r.Body).Decode(&assessment)
+	err = decodeJSONBody(w, r, &input)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		var mr *malformedRequest
+		if errors.As(err, &mr) {
+			http.Error(w, mr.msg, mr.status)
+		} else {
+			log.Print(err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
 		return
 	}
+
+	/*
+		_, err := c.ShowAssessment.Execute(input)
+		if err != nil {
+			if strings.TrimSpace(err.Error()) == "record not found" {
+				w.WriteHeader(http.StatusNotFound)
+				json.Marshal([]string{})
+				return
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+		}
+
+		var assessment dto.UpdateAssessmentInput
+		err = json.NewDecoder(r.Body).Decode(&assessment)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}*/
+	var assessment dto.UpdateAssessmentInput
 	err = c.UpdateAssessment.Execute(input, assessment)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -205,7 +238,7 @@ func (c *AssessmentHandlers) UpdateAssessmentHandlers(w http.ResponseWriter, r *
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (c *AssessmentHandlers) DeleteAssessmentHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *AssessmentHandlers) DeleteAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 

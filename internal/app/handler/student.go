@@ -1,4 +1,4 @@
-package app
+package handler
 
 import (
 	"encoding/json"
@@ -20,11 +20,11 @@ type StudentHandlers struct {
 }
 
 type IStudentHandlers interface {
-	CreateStudentHandlers(w http.ResponseWriter, r *http.Request)
-	SelectStudentsHandlers(w http.ResponseWriter, r *http.Request)
-	ShowStudentHandlers(w http.ResponseWriter, r *http.Request)
-	UpdateStudentHandlers(w http.ResponseWriter, r *http.Request)
-	DeleteStudentHandlers(w http.ResponseWriter, r *http.Request)
+	CreateStudentHandler(w http.ResponseWriter, r *http.Request)
+	SelectStudentsHandler(w http.ResponseWriter, r *http.Request)
+	ShowStudentHandler(w http.ResponseWriter, r *http.Request)
+	UpdateStudentHandler(w http.ResponseWriter, r *http.Request)
+	DeleteStudentHandler(w http.ResponseWriter, r *http.Request)
 }
 
 func NewStudentHandlers(createStudent *usecase.CreateStudent, selectStudent *usecase.SelectStudents, showStudent *usecase.ShowStudent,
@@ -38,7 +38,7 @@ func NewStudentHandlers(createStudent *usecase.CreateStudent, selectStudent *use
 	}
 }
 
-func (c *StudentHandlers) CreateStudentHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *StudentHandlers) CreateStudentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.StudentInput
 	err := json.NewDecoder(r.Body).Decode(&input)
 
@@ -56,7 +56,7 @@ func (c *StudentHandlers) CreateStudentHandlers(w http.ResponseWriter, r *http.R
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (c *StudentHandlers) SelectStudentsHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *StudentHandlers) SelectStudentsHandler(w http.ResponseWriter, r *http.Request) {
 	output, err := c.SelectStudent.Execute()
 
 	if err != nil {
@@ -73,7 +73,7 @@ func (c *StudentHandlers) SelectStudentsHandlers(w http.ResponseWriter, r *http.
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *StudentHandlers) ShowStudentHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *StudentHandlers) ShowStudentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 	output, err := c.ShowStudent.Execute(input)
@@ -92,7 +92,7 @@ func (c *StudentHandlers) ShowStudentHandlers(w http.ResponseWriter, r *http.Req
 	json.NewEncoder(w).Encode(output)
 }
 
-func (c *StudentHandlers) UpdateStudentHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *StudentHandlers) UpdateStudentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 
@@ -124,7 +124,7 @@ func (c *StudentHandlers) UpdateStudentHandlers(w http.ResponseWriter, r *http.R
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (c *StudentHandlers) DeleteStudentHandlers(w http.ResponseWriter, r *http.Request) {
+func (c *StudentHandlers) DeleteStudentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
 

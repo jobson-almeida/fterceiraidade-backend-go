@@ -1,9 +1,8 @@
 package entity
 
 import (
-	util "github.com/jobson-almeida/fterceiraidade-backend-go/util/validation"
-
 	"github.com/google/uuid"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 )
 
 type Student struct {
@@ -40,10 +39,6 @@ func NewStudent(avatar string, firstname string, lastname string, email string, 
 
 	return student, nil
 }
-
-//func NewStudent() *Student {
-//	return &Student{}
-//}
 
 func UpdateStudent(avatar string, firstname string, lastname string, email string, phone string, address DetailsAddress) (*Student, error) {
 	student := &Student{

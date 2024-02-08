@@ -1,11 +1,10 @@
 package usecase
 
 import (
-	"fterceiraidade-backend-go/internal/dto"
-	"fterceiraidade-backend-go/internal/entity"
-	"fterceiraidade-backend-go/internal/repository"
-
 	"github.com/google/uuid"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 )
 
 type CreateClassroom struct {
