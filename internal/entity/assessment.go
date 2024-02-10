@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 	"github.com/lib/pq"
@@ -39,6 +41,7 @@ func NewAssessment(description string, courses pq.StringArray, classrooms pq.Str
 
 	err := util.Validation(assessment)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
@@ -65,6 +68,7 @@ func UpdateAssessment(description string, courses pq.StringArray, classrooms pq.
 
 	err := util.Validation(assessment)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 

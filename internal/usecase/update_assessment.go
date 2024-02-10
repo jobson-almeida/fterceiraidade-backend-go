@@ -26,14 +26,20 @@ func (u *UpdateAssessment) Execute(where dto.IDInput, data dto.UpdateAssessmentI
 		})
 	}
 
-	assessment := entity.UpdateAssessment()
-	assessment.Courses = data.Courses
-	assessment.Classrooms = data.Classrooms
-	assessment.StartDate = data.StartDate
-	assessment.EndDate = data.EndDate
-	assessment.Quiz = quiz
+	assessment, err := entity.UpdateAssessment(
+		data.Description,
+		data.Courses,
+		data.Classrooms,
+		data.StartDate,
+		data.EndDate,
+		quiz,
+	)
 
-	err := u.AssessmentRepository.Update(input, assessment)
+	if err != nil {
+		return err
+	}
+
+	err = u.AssessmentRepository.Update(input, assessment)
 	if err != nil {
 		return err
 	}
