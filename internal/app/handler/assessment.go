@@ -2,10 +2,7 @@ package handler
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
-	"log"
 	"net/http"
 	"strings"
 
@@ -43,6 +40,7 @@ func NewAssessmentHandlers(createAssessment *usecase.CreateAssessment, selectAss
 }
 
 // ------------------------------------
+/*
 type malformedRequest struct {
 	status int
 	msg    string
@@ -110,7 +108,7 @@ func decodeJSONBody(w http.ResponseWriter, r *http.Request, dst interface{}) err
 		return &malformedRequest{status: http.StatusBadRequest, msg: msg}
 	}
 	return nil
-}
+}*/
 
 //----------------------------
 
@@ -137,6 +135,7 @@ func (c *AssessmentHandlers) CreateAssessmentHandler(w http.ResponseWriter, r *h
 	}
 	err = c.CreateAssessment.Execute(&input)
 	if err != nil {
+		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -184,31 +183,6 @@ func (c *AssessmentHandlers) ShowAssessmentHandler(w http.ResponseWriter, r *htt
 func (c *AssessmentHandlers) UpdateAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
-
-	_, err := c.ShowAssessment.Execute(input)
-	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
-			return
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-	}
-
-	err = decodeJSONBody(w, r, &input)
-	if err != nil {
-		var mr *malformedRequest
-		if errors.As(err, &mr) {
-			http.Error(w, mr.msg, mr.status)
-		} else {
-			log.Print(err.Error())
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
-		return
-	}
-
 	/*
 		_, err := c.ShowAssessment.Execute(input)
 		if err != nil {
@@ -222,7 +196,32 @@ func (c *AssessmentHandlers) UpdateAssessmentHandler(w http.ResponseWriter, r *h
 			}
 		}
 
-		var assessment dto.UpdateAssessmentInput
+		err = decodeJSONBody(w, r, &input)
+		if err != nil {
+			var mr *malformedRequest
+			if errors.As(err, &mr) {
+				http.Error(w, mr.msg, mr.status)
+			} else {
+				log.Print(err.Error())
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			}
+			return
+		}
+
+	*/
+	_, err := c.ShowAssessment.Execute(input)
+	if err != nil {
+		if strings.TrimSpace(err.Error()) == "record not found" {
+			w.WriteHeader(http.StatusNotFound)
+			json.Marshal([]string{})
+			return
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}
+
+	/*	var assessment dto.UpdateAssessmentInput
 		err = json.NewDecoder(r.Body).Decode(&assessment)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)

@@ -201,7 +201,7 @@ DELETE http://localhost:8888/classrooms/0d6b485a-efca-4e5d-af0e-7c769a0d6874
 GET http://localhost:8888/assessments
    
 ### 
-GET http://localhost:8888/assessments/-a83597cd-3acf-442f-b248-194913d10b52
+GET http://localhost:8888/assessments/a83597cd-3acf-442f-b248-194913d10b52
      
 ###  
 POST http://localhost:8888/assessments
@@ -210,7 +210,7 @@ Content-Type: application/json
 { 
 	"Description": "Assessment description",
 	"Courses": ["b17d9cf7-1618-4237-9dad-7517a8a3839d","1d6b485a-efca-4e5d-af0e-7c769a0d6874"],
-	"Classrooms": ["1d6b485a-efca-4e5d-af0e-7c769a0d6874"],
+	"Classrooms": ["b17d9cf7-1618-4237-9dad-7517a8a3839d","1d6b485a-efca-4e5d-af0e-7c769a0d6874"],
 	"StartDate": "2024-02-08",
 	"EndDate": "2024-02-08",
 	"Quiz": [

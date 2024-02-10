@@ -8,20 +8,15 @@ import (
 
 type Assessment struct {
 	Base
-	Description string         `json:"description" validate:"required" gorm:"type:varchar(255)"`
-	Courses     pq.StringArray `json:"image" validate:"required" gorm:"type:text[]"`
-	Classrooms  pq.StringArray `json:"classrooms" validate:"required" gorm:"type:text[]"`
+	Description string         `json:"description" validate:"required,max=22" gorm:"type:varchar(22)"`
+	Courses     pq.StringArray `json:"courses" validate:"required,array_uuid" gorm:"type:text[]"`
+	Classrooms  pq.StringArray `json:"classrooms" validate:"required,array_uuid" gorm:"type:text[]"`
 	StartDate   string         `json:"startdate" validate:"required" gorm:"type:varchar"`
 	EndDate     string         `json:"enddate" validate:"required" gorm:"type:varchar"`
 	Quiz        []*Quiz        `json:"quiz" gorm:"serializer:json"`
 }
 
 func init() {}
-
-/*
-func cNewAssessment() *Assessment {
-	return &Assessment{}
-}*/
 
 func UpdateAssessment() *Assessment {
 	return &Assessment{}
