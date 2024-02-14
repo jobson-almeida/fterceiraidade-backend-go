@@ -26,8 +26,6 @@ func Validation(i interface{}) error {
 
 	validate.RegisterValidation("phone", PhoneNumberValidation)
 	validate.RegisterValidation("array_uuid", ArrayUUIDValidation)
-	validate.RegisterValidation("is_slice", IsSlice)
-	validate.RegisterValidation("is_string_elem", IsStringElem)
 
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
@@ -56,8 +54,8 @@ func Validation(i interface{}) error {
 				error = fmt.Sprintf("%s value does not match valid %s", err.Field(), err.Tag())
 			case "phone":
 				error = fmt.Sprintf("%s value does not match a valid phone number", err.Value())
-			// case "uuid":
-			// 	error = fmt.Sprintf("%s value does not match a valid %s's id", err.Value(), err.Field())
+			case "uuid":
+				error = fmt.Sprintf("%s value does not match a valid %s's id", err.Value(), err.Field())
 			case "array_uuid":
 				error = fmt.Sprintf("one or more values do not match a valid %s id", err.Field())
 			default:
@@ -81,6 +79,7 @@ func PhoneNumberValidation(sl validator.FieldLevel) bool {
 
 func ArrayUUIDValidation(sl validator.FieldLevel) bool {
 	value := sl.Field()
+	fmt.Println(value)
 	re := regexp.MustCompile(`^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$`)
 
 	slice, ok := value.Interface().(pq.StringArray)
@@ -91,12 +90,4 @@ func ArrayUUIDValidation(sl validator.FieldLevel) bool {
 		return re.MatchString(v)
 	}
 	return true
-}
-
-func IsSlice(fl validator.FieldLevel) bool {
-	return fl.Top().Kind() == reflect.Slice
-}
-
-func IsStringElem(fl validator.FieldLevel) bool {
-	return fl.Top().Type().Elem().Kind() == reflect.String
 }

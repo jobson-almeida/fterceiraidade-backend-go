@@ -11,20 +11,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// @title Swagger Example API
-// @version 1.0
-// @description This is a sample server Petstore server.
-// @termsOfService http://swagger.io/terms/
-
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
-
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host petstore.swagger.io
-// @BasePath
 func main() {
 	db := *database.Connection()
 
@@ -74,7 +60,7 @@ func main() {
 	showAssessment := usecase.NewShowAssessment(repositoryAssessment)
 	updateAssessment := usecase.NewUpdateAssessment(repositoryAssessment)
 	deleteAssessment := usecase.NewDeleteAssessment(repositoryAssessment)
-	assessmentHandlers := handler.NewAssessmentHandlers(createAssessment, selectAssessments, showAssessment, updateAssessment, deleteAssessment)
+	assessmentHandlers := handler.NewAssessmentHandlers(createAssessment, selectAssessments, showAssessment, updateAssessment, deleteAssessment, showCourse, showClassroom)
 
 	r := routes.Router(courseHandlers, studentHandlers, teacherHandlers, questionHandlers, classroomHandlers, assessmentHandlers)
 
