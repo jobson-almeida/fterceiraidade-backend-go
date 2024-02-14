@@ -18,12 +18,16 @@ func (u *UpdateCourse) Execute(where dto.IDInput, data dto.UpdateCourseInput) er
 	input := entity.NewInputID()
 	input.ID = where.ID
 
-	course := entity.UpdateCourse()
-	course.Name = data.Name
-	course.Description = data.Description
-	course.Image = data.Image
+	course, err := entity.NewCourse(
+		data.Name,
+		data.Description,
+		data.Image,
+	)
+	if err != nil {
+		return err
+	}
 
-	err := u.CourseRepository.Update(input, course)
+	err = u.CourseRepository.Update(input, course)
 	if err != nil {
 		return err
 	}
