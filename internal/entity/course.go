@@ -1,5 +1,10 @@
 package entity
 
+import (
+	"github.com/google/uuid"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
+)
+
 type Course struct {
 	Base
 	Name        string `json:"name" validate:"required" gorm:"type:varchar(255);unique"`
@@ -9,10 +14,33 @@ type Course struct {
 
 func init() {}
 
-func NewCourse() *Course {
-	return &Course{}
+func NewCourse(name string, description string, image string) (*Course, error) {
+	course := &Course{
+		Description: description,
+		Name:        name,
+		Image:       image,
+	}
+	course.ID = uuid.New().String()
+
+	err := util.Validation(course)
+	if err != nil {
+		return nil, err
+	}
+
+	return course, nil
 }
 
-func UpdateCourse() *Course {
-	return &Course{}
+func UpdateCourse(description string, name string, image string) (*Course, error) {
+	course := &Course{
+		Description: description,
+		Name:        name,
+		Image:       image,
+	}
+
+	err := util.Validation(course)
+	if err != nil {
+		return nil, err
+	}
+
+	return course, nil
 }
