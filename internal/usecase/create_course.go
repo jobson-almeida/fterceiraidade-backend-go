@@ -4,8 +4,6 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
-
-	"github.com/google/uuid"
 )
 
 type CreateCourse struct {
@@ -17,13 +15,16 @@ func NewCreateCourse(repository repository.ICourseRepository) *CreateCourse {
 }
 
 func (c *CreateCourse) Execute(input dto.CourseInput) error {
-	course := entity.NewCourse()
-	course.ID = uuid.New().String()
-	course.Name = input.Name
-	course.Description = input.Description
-	course.Image = input.Image
+	course, err := entity.NewCourse(
+		input.Name,
+		input.Description,
+		input.Image,
+	)
+	if err != nil {
+		return err
+	}
 
-	err := c.CourseRepository.Create(course)
+	err = c.CourseRepository.Create(course)
 	if err != nil {
 		return err
 	}
