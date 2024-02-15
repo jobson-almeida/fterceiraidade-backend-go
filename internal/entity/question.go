@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"github.com/google/uuid"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 	"github.com/lib/pq"
 )
 
@@ -16,10 +18,39 @@ type Question struct {
 
 func init() {}
 
-func NewQuestion() *Question {
-	return &Question{}
+func NewQuestion(questioning string, type_ string, image *string, alternatives pq.StringArray, answer *string, discipline string) (*Question, error) {
+	question := &Question{
+		Questioning:  questioning,
+		Type:         type_,
+		Image:        image,
+		Alternatives: alternatives,
+		Answer:       answer,
+		Discipline:   discipline,
+	}
+	question.ID = uuid.New().String()
+
+	err := util.Validation(question)
+	if err != nil {
+		return nil, err
+	}
+
+	return question, nil
 }
 
-func UpdateQuestion() *Question {
-	return &Question{}
+func UpdateQuestion(questioning string, type_ string, image *string, alternatives pq.StringArray, answer *string, discipline string) (*Question, error) {
+	question := &Question{
+		Questioning:  questioning,
+		Type:         type_,
+		Image:        image,
+		Alternatives: alternatives,
+		Answer:       answer,
+		Discipline:   discipline,
+	}
+
+	err := util.Validation(question)
+	if err != nil {
+		return nil, err
+	}
+
+	return question, nil
 }
