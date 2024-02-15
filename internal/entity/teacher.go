@@ -17,14 +17,6 @@ type Teacher struct {
 
 func init() {}
 
-func NewTeachere() *Teacher {
-	return &Teacher{}
-}
-
-func UpdateTeachere() *Teacher {
-	return &Teacher{}
-}
-
 func NewTeacher(avatar string, firstname string, lastname string, email string, phone string, address DetailsAddress) (*Teacher, error) {
 	teacher := &Teacher{
 		Avatar:    avatar,
