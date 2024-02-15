@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"github.com/google/uuid"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
@@ -16,16 +15,19 @@ func NewCreateQuestion(repository repository.IQuestionRepository) *CreateQuestio
 }
 
 func (c *CreateQuestion) Execute(input dto.QuestionInput) error {
-	question := entity.NewQuestion()
-	question.ID = uuid.New().String()
-	question.Questioning = input.Questioning
-	question.Type = input.Type
-	question.Image = input.Image
-	question.Alternatives = input.Alternatives
-	question.Answer = input.Answer
-	question.Discipline = input.Discipline
+	question, err := entity.NewQuestion(
+		input.Questioning,
+		input.Type,
+		input.Image,
+		input.Alternatives,
+		input.Answer,
+		input.Discipline,
+	)
+	if err != nil {
+		return err
+	}
 
-	err := c.QuestionRepository.Create(question)
+	err = c.QuestionRepository.Create(question)
 	if err != nil {
 		return err
 	}
