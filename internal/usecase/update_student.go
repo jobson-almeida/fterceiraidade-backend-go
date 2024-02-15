@@ -41,28 +41,3 @@ func (u *UpdateStudent) Execute(where dto.IDInput, data dto.UpdateStudentInput) 
 
 	return nil
 }
-
-/*input := entity.NewInputID()
-	input.ID = where.ID
-
-	student := entity.UpdateStudent()
-	student.Avatar = data.Avatar
-	student.Firstname = data.Firstname
-	student.Lastname = data.Lastname
-	student.Email = data.Email
-	student.Phone = data.Phone
-	student.Address = entity.DetailsAddress{City: data.Address.City, State: data.Address.State, Street: data.Address.Street}
-
-	err := cv.CustomValidator(student)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	err = u.StudentRepository.Update(input, student)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-*/
