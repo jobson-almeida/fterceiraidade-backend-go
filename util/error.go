@@ -7,6 +7,7 @@ import (
 func Error(err error) (int, string) {
 	e := ""
 	s := 200
+	//var g error
 
 	if strings.TrimSpace(err.Error()) == "record not found" {
 		e = ""
