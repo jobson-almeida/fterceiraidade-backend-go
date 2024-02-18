@@ -93,19 +93,14 @@ func (c *TeacherHandlers) ShowTeacherHandler(w http.ResponseWriter, r *http.Requ
 	json.NewEncoder(w).Encode(output)
 }
 
-type ValidationError struct {
-	Message string `json:"error"`
-}
-
 func (c *TeacherHandlers) UpdateTeacherHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := c.ShowTeacher.Execute(input)
 	if err != nil {
 		s, e := util.Error(err)
-		//http.Error(w, e, s)
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(s)
 		w.Write([]byte(e))
 		return
@@ -115,7 +110,6 @@ func (c *TeacherHandlers) UpdateTeacherHandler(w http.ResponseWriter, r *http.Re
 	err = json.NewDecoder(r.Body).Decode(&teacher)
 	if err != nil {
 		s, e := util.Error(err)
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(s)
 		w.Write([]byte(e))
 		return
@@ -124,12 +118,10 @@ func (c *TeacherHandlers) UpdateTeacherHandler(w http.ResponseWriter, r *http.Re
 	err = c.UpdateTeacher.Execute(input, teacher)
 	if err != nil {
 		s, e := util.Error(err)
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(s)
 		w.Write([]byte(e))
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)
 }
 
