@@ -7,6 +7,7 @@ import (
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 
 	"github.com/go-chi/chi"
 )
@@ -78,10 +79,12 @@ func (c *TeacherHandlers) ShowTeacherHandler(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("teacher not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -96,25 +99,23 @@ func (c *TeacherHandlers) UpdateTeacherHandler(w http.ResponseWriter, r *http.Re
 
 	_, err := c.ShowTeacher.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
-			return
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+		s, e := util.Error(err)
+		http.Error(w, e, s)
+		return
 	}
 
 	var teacher dto.UpdateTeacherInput
 	err = json.NewDecoder(r.Body).Decode(&teacher)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		http.Error(w, e, s)
 		return
 	}
+
 	err = c.UpdateTeacher.Execute(input, teacher)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		http.Error(w, e, s)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -128,10 +129,12 @@ func (c *TeacherHandlers) DeleteTeacherHandler(w http.ResponseWriter, r *http.Re
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("teacher not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}

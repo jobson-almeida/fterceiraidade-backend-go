@@ -76,14 +76,17 @@ func (c *CourseHandlers) SelectCoursesHandler(w http.ResponseWriter, r *http.Req
 func (c *CourseHandlers) ShowCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+
 	output, err := c.ShowCourse.Execute(input)
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("course not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -100,10 +103,12 @@ func (c *CourseHandlers) UpdateCourseHandler(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("course not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -130,10 +135,12 @@ func (c *CourseHandlers) DeleteCourseHandler(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("course not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}

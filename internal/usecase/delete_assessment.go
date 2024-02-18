@@ -15,9 +15,12 @@ func NewDeleteAssessment(repository repository.IAssessmentRepository) *DeleteAss
 }
 
 func (d *DeleteAssessment) Execute(input dto.IDInput) error {
-	assessment := entity.NewInputID()
-	assessment.ID = input.ID
-	err := d.AssessmentRepository.Delete(assessment)
+	id, err := entity.NewInputID(input.ID)
+	if err != nil {
+		return err
+	}
+
+	err = d.AssessmentRepository.Delete(id)
 	if err != nil {
 		return err
 	}

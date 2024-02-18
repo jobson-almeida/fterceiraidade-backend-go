@@ -15,10 +15,12 @@ func NewShowAssessment(repository repository.IAssessmentRepository) *ShowAssessm
 }
 
 func (s *ShowAssessment) Execute(input dto.IDInput) (*dto.AssessmentOutput, error) {
-	assessment := entity.NewInputID()
-	assessment.ID = input.ID
+	id, err := entity.NewInputID(input.ID)
+	if err != nil {
+		return nil, err
+	}
 
-	res, err := s.AssessmentRepository.Show(assessment)
+	res, err := s.AssessmentRepository.Show(id)
 	if err != nil {
 		return nil, err
 	}

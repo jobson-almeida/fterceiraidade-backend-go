@@ -109,10 +109,12 @@ func (a *AssessmentHandlers) ShowAssessmentHandler(w http.ResponseWriter, r *htt
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("assessment not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -127,52 +129,64 @@ func (a *AssessmentHandlers) UpdateAssessmentHandler(w http.ResponseWriter, r *h
 
 	_, err := a.ShowAssessment.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+		/*if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("assessment not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
-		}
+		}*/
 	}
 
 	var assessment dto.UpdateAssessmentInput
 	err = json.NewDecoder(r.Body).Decode(&assessment)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		//	w.WriteHeader(http.StatusBadRequest)
+		//	w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	/*
-		err = a.showCourseHandler(w, r, assessment.Courses)
-		if err != nil {
-			if strings.TrimSpace(err.Error()) == "record not found" {
-				w.WriteHeader(http.StatusNotFound)
-				w.Write([]byte("course not found"))
-				return
-			}
-		}
-	*/
+
+	err = a.showCourseHandler(w, r, assessment.Courses)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+		/*if strings.TrimSpace(err.Error()) == "record not found" {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("course not found"))
+			return
+		} else {
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
+			return
+		}*/
+	}
+
 	err = a.showClassroomHandler(w, r, assessment.Classrooms)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+		/*if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte("classroom not found"))
 			return
 		} else {
 			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			//e := strings.SplitN(string(err.Error()), "pq: ", 1)[0]
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(after))
 			return
-		}
+		}*/
 	}
 
 	err = a.UpdateAssessment.Execute(input, assessment)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -184,14 +198,9 @@ func (a *AssessmentHandlers) DeleteAssessmentHandler(w http.ResponseWriter, r *h
 
 	_, err := a.ShowAssessment.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
-			return
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	err = a.DeleteAssessment.Execute(input)

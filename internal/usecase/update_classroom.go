@@ -15,19 +15,22 @@ func NewUpdateClassroom(repository repository.IClassroomRepository) *UpdateClass
 }
 
 func (u *UpdateClassroom) Execute(where dto.IDInput, data dto.UpdateClassroomInput) error {
-	input := entity.NewInputID()
-	input.ID = where.ID
+	id, err := entity.NewInputID(where.ID)
+	if err != nil {
+		return err
+	}
 
 	classroom, err := entity.UpdateClassroom(
 		data.Name,
 		data.Description,
 		data.Course,
 	)
+
 	if err != nil {
 		return err
 	}
 
-	err = u.ClassroomRepository.Update(input, classroom)
+	err = u.ClassroomRepository.Update(id, classroom)
 	if err != nil {
 		return err
 	}

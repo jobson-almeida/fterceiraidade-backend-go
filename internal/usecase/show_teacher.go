@@ -15,10 +15,12 @@ func NewShowTeacher(repository repository.ITeacherRepository) *ShowTeacher {
 }
 
 func (s *ShowTeacher) Execute(input dto.IDInput) (*dto.TeacherOutput, error) {
-	teacher := entity.NewInputID()
-	teacher.ID = input.ID
+	id, err := entity.NewInputID(input.ID)
+	if err != nil {
+		return nil, err
+	}
 
-	res, err := s.TeacherRepository.Show(teacher)
+	res, err := s.TeacherRepository.Show(id)
 	if err != nil {
 		return nil, err
 	}

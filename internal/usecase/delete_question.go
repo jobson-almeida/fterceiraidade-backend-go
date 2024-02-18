@@ -15,9 +15,12 @@ func NewDeleteQuestion(repository repository.IQuestionRepository) *DeleteQuestio
 }
 
 func (d *DeleteQuestion) Execute(input dto.IDInput) error {
-	question := entity.NewInputID()
-	question.ID = input.ID
-	err := d.QuestionRepository.Delete(question)
+	id, err := entity.NewInputID(input.ID)
+	if err != nil {
+		return err
+	}
+
+	err = d.QuestionRepository.Delete(id)
 	if err != nil {
 		return err
 	}

@@ -15,19 +15,22 @@ func NewUpdateCourse(repository repository.ICourseRepository) *UpdateCourse {
 }
 
 func (u *UpdateCourse) Execute(where dto.IDInput, data dto.UpdateCourseInput) error {
-	input := entity.NewInputID()
-	input.ID = where.ID
-
-	course, err := entity.NewCourse(
-		data.Name,
-		data.Description,
-		data.Image,
-	)
+	id, err := entity.NewInputID(where.ID)
 	if err != nil {
 		return err
 	}
 
-	err = u.CourseRepository.Update(input, course)
+	course, err := entity.UpdateCourse(
+		data.Name,
+		data.Description,
+		data.Image,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	err = u.CourseRepository.Update(id, course)
 	if err != nil {
 		return err
 	}

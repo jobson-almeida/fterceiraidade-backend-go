@@ -75,14 +75,17 @@ func (c *ClassroomHandlers) SelectClassroomsHandler(w http.ResponseWriter, r *ht
 func (c *ClassroomHandlers) ShowClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+
 	output, err := c.ShowClassroom.Execute(input)
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("classroom not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -99,10 +102,12 @@ func (c *ClassroomHandlers) UpdateClassroomHandler(w http.ResponseWriter, r *htt
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("classroom not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -129,10 +134,12 @@ func (c *ClassroomHandlers) DeleteClassroomHandler(w http.ResponseWriter, r *htt
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("classroom not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}

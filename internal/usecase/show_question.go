@@ -15,10 +15,12 @@ func NewShowQuestion(repository repository.IQuestionRepository) *ShowQuestion {
 }
 
 func (s *ShowQuestion) Execute(input dto.IDInput) (*dto.QuestionOutput, error) {
-	course := entity.NewInputID()
-	course.ID = input.ID
+	id, err := entity.NewInputID(input.ID)
+	if err != nil {
+		return nil, err
+	}
 
-	res, err := s.QuestionRepository.Show(course)
+	res, err := s.QuestionRepository.Show(id)
 	if err != nil {
 		return nil, err
 	}

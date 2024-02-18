@@ -78,10 +78,12 @@ func (c *QuestionHandlers) ShowQuestionHandler(w http.ResponseWriter, r *http.Re
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("question not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -98,10 +100,12 @@ func (c *QuestionHandlers) UpdateQuestionHandler(w http.ResponseWriter, r *http.
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("question not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}
@@ -128,10 +132,12 @@ func (c *QuestionHandlers) DeleteQuestionHandler(w http.ResponseWriter, r *http.
 	if err != nil {
 		if strings.TrimSpace(err.Error()) == "record not found" {
 			w.WriteHeader(http.StatusNotFound)
-			json.Marshal([]string{})
+			w.Write([]byte("question not found"))
 			return
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
+			_, after, _ := strings.Cut(err.Error(), "pq: ")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(after))
 			return
 		}
 	}

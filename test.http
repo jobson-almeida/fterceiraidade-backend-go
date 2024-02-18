@@ -18,13 +18,13 @@ Content-Type: application/json
  }
  
  
-### 
-PUT http://localhost:8888/courses/8d5f1678-a842-407f-8864-87472fb398d0
+###  
+PUT http://localhost:8888/courses/98773285-eec0-45b1-88f4-9018abdb1cbd
 Content-Type: application/json
  
  {
-   "Name": "Course B",
-   "Description": "Course B Full Advanced",
+   "Name": "Course A",
+   "Description": "Course A Full Advanced",
    "Image": "/assets/images/blank.png"
  }
   
@@ -55,10 +55,11 @@ Content-Type: application/json
 	  "City": "city", 
 	  "State": "state", 
     "Street": "street"
-  }
-}
- 
-### 
+  }  
+}       
+               
+//1acbb0ad-e900-44fa-81da-4e03f76dc77d     
+###  ec140b6f-966e-4357-bc35-2abc4ebaa17d   
 PUT http://localhost:8888/teachers/1acbb0ad-e900-44fa-81da-4e03f76dc77d
 Content-Type: application/json
  
@@ -67,7 +68,7 @@ Content-Type: application/json
   "Firstname": "Alice",
 	"Lastname": "Brown",
 	"Email": "alice@email.com",
-	"Phone": "+5512345678",
+	"Phone": "+557312345678",
 	"Address": {
 	  "City": "city", 
 	  "State": "state", 
@@ -101,9 +102,9 @@ Content-Type: application/json
 	  "State": "state", 
     "Street": "street"
   }
-}  
-  
-### 
+} 
+     
+###  
 PUT http://localhost:8888/students/fe79e05c-6180-4bb8-98c5-2b9d1d3aef10
 Content-Type: application/json
  
@@ -197,7 +198,7 @@ DELETE http://localhost:8888/classrooms/0d6b485a-efca-4e5d-af0e-7c769a0d6874
 	
 //-------------------------
        
-### 
+###  
 GET http://localhost:8888/assessments
    
 ###   
@@ -224,15 +225,15 @@ Content-Type: application/json
 		}
 	]
 }
-
-###    
+   
+###   
 PUT http://localhost:8888/assessments/e862bc21-be81-4c17-9bfb-a8d04d39252d
 Content-Type: application/json
-
+ 
 {
 	"Description": "Assessment description",
-	"Courses": ["98773285-eec0-45b1-88f4-9018abdb1cbd"],
-	"Classrooms": ["27986656-fd2a-4c87-9f67-33dba2ff8b10-"],
+	"Courses": ["98773285-eec0-45b1-88f4-9018abdb1cbd", "98773285-eec0-45b1-88f4-9018abdb1cbd"],
+	"Classrooms": ["27986656-fd2a-4c87-9f67-33dba2ff8b10"],
 	"StartDate": "2024-02-08",
 	"EndDate": "2024-02-08",
 	"Quiz": [
@@ -246,6 +247,6 @@ Content-Type: application/json
 		}
 	]
 }
-
+ 
 ### DELETE
 DELETE http://localhost:8888/assessments/0d6b485a-efca-4e5d-af0e-7c769a0d6874

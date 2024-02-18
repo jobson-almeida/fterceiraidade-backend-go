@@ -15,8 +15,10 @@ func NewUpdateAssessment(repository repository.IAssessmentRepository) *UpdateAss
 }
 
 func (u *UpdateAssessment) Execute(where dto.IDInput, data dto.UpdateAssessmentInput) error {
-	input := entity.NewInputID()
-	input.ID = where.ID
+	id, err := entity.NewInputID(where.ID)
+	if err != nil {
+		return err
+	}
 
 	var quiz []*entity.Quiz
 	for _, r := range data.Quiz {
@@ -39,7 +41,7 @@ func (u *UpdateAssessment) Execute(where dto.IDInput, data dto.UpdateAssessmentI
 		return err
 	}
 
-	err = u.AssessmentRepository.Update(input, assessment)
+	err = u.AssessmentRepository.Update(id, assessment)
 	if err != nil {
 		return err
 	}

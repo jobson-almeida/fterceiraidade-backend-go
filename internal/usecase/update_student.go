@@ -15,8 +15,10 @@ func NewUpdateStudent(repository repository.IStudentRepository) *UpdateStudent {
 }
 
 func (u *UpdateStudent) Execute(where dto.IDInput, data dto.UpdateStudentInput) error {
-	input := entity.NewInputID()
-	input.ID = where.ID
+	id, err := entity.NewInputID(where.ID)
+	if err != nil {
+		return err
+	}
 
 	address := entity.DetailsAddress{
 		City: data.Address.City, State: data.Address.State, Street: data.Address.Street,
@@ -34,7 +36,7 @@ func (u *UpdateStudent) Execute(where dto.IDInput, data dto.UpdateStudentInput) 
 		return err
 	}
 
-	err = u.StudentRepository.Update(input, student)
+	err = u.StudentRepository.Update(id, student)
 	if err != nil {
 		return err
 	}

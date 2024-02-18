@@ -15,8 +15,10 @@ func NewUpdateQuestion(repository repository.IQuestionRepository) *UpdateQuestio
 }
 
 func (u *UpdateQuestion) Execute(where dto.IDInput, data dto.UpdateQuestionInput) error {
-	input := entity.NewInputID()
-	input.ID = where.ID
+	id, err := entity.NewInputID(where.ID)
+	if err != nil {
+		return err
+	}
 
 	question, err := entity.UpdateQuestion(
 		data.Questioning,
@@ -30,7 +32,7 @@ func (u *UpdateQuestion) Execute(where dto.IDInput, data dto.UpdateQuestionInput
 		return err
 	}
 
-	err = u.QuestionRepository.Update(input, question)
+	err = u.QuestionRepository.Update(id, question)
 	if err != nil {
 		return err
 	}

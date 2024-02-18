@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/lib/pq"
 )
 
 type ValidationError struct {
@@ -25,7 +24,6 @@ func Validation(i interface{}) error {
 	validate := validator.New()
 
 	validate.RegisterValidation("phone", PhoneNumberValidation)
-	validate.RegisterValidation("array_uuid", ArrayUUIDValidation)
 
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
@@ -45,28 +43,23 @@ func Validation(i interface{}) error {
 		for _, err := range err.(validator.ValidationErrors) {
 			switch err.Tag() {
 			case "required":
-				error = fmt.Sprintf("field %s is required", err.Field())
+				error = fmt.Sprintf("vl: field %s is required", err.Field())
 			case "min":
-				error = fmt.Sprintf("%s must have a minimum of %s characters", err.Field(), err.Param())
+				error = fmt.Sprintf("vl: %s must have a minimum of %s characters", err.Field(), err.Param())
 			case "max":
-				error = fmt.Sprintf("%s must have a maximum of %s characters", err.Field(), err.Param())
+				error = fmt.Sprintf("vl: %s must have a maximum of %s characters", err.Field(), err.Param())
 			case "email":
-				error = fmt.Sprintf("%s value does not match valid %s", err.Field(), err.Tag())
+				error = fmt.Sprintf("vl: %s value does not match valid %s", err.Value(), err.Tag())
 			case "phone":
-				error = fmt.Sprintf("%s value does not match a valid phone number", err.Value())
+				error = fmt.Sprintf("vl: %s value does not match a valid phone number", err.Value())
 			case "uuid":
-				error = fmt.Sprintf("%s value does not match a valid %s's id", err.Value(), err.Field())
-			case "array_uuid":
-				error = fmt.Sprintf("one or more values do not match a valid %s id", err.Field())
+				error = fmt.Sprintf("vl: %s value does not match a valid id", err.Value())
 			default:
-				error = fmt.Sprintf("something wrong on %s", err.Field())
+				error = fmt.Sprintf("vl: something wrong on %s", err.Field())
 			}
 		}
 
-		return &ValidationError{
-			Message: error,
-		}
-
+		return &ValidationError{Message: error}
 	}
 	return nil
 }
@@ -75,19 +68,4 @@ func PhoneNumberValidation(sl validator.FieldLevel) bool {
 	value := sl.Field().String()
 	re := regexp.MustCompile(`[+]{1}?\d{12}$`)
 	return re.MatchString(value)
-}
-
-func ArrayUUIDValidation(sl validator.FieldLevel) bool {
-	value := sl.Field()
-	fmt.Println(value)
-	re := regexp.MustCompile(`^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$`)
-
-	slice, ok := value.Interface().(pq.StringArray)
-	if !ok {
-		return false
-	}
-	for _, v := range slice {
-		return re.MatchString(v)
-	}
-	return true
 }
