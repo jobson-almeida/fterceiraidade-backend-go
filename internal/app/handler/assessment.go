@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 	"github.com/lib/pq"
 
 	"github.com/go-chi/chi"
@@ -69,34 +69,41 @@ func NewAssessmentHandlers(createAssessment *usecase.CreateAssessment, selectAss
 
 func (a *AssessmentHandlers) CreateAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.AssessmentInput
-	err := json.NewDecoder(r.Body).Decode(&input)
+	w.Header().Set("Content-Type", "application/json")
 
+	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	err = a.CreateAssessment.Execute(&input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 }
 
 func (a *AssessmentHandlers) SelectAssessmentsHandler(w http.ResponseWriter, r *http.Request) {
-	output, err := a.SelectAssessment.Execute()
+	w.Header().Set("Content-Type", "application/json")
 
+	output, err := a.SelectAssessment.Execute()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	if len(output) == 0 {
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }
@@ -104,21 +111,15 @@ func (a *AssessmentHandlers) SelectAssessmentsHandler(w http.ResponseWriter, r *
 func (a *AssessmentHandlers) ShowAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	output, err := a.ShowAssessment.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("assessment not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }
@@ -126,67 +127,46 @@ func (a *AssessmentHandlers) ShowAssessmentHandler(w http.ResponseWriter, r *htt
 func (a *AssessmentHandlers) UpdateAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := a.ShowAssessment.Execute(input)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
-		/*if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("assessment not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}*/
 	}
 
 	var assessment dto.UpdateAssessmentInput
 	err = json.NewDecoder(r.Body).Decode(&assessment)
 	if err != nil {
-		//	w.WriteHeader(http.StatusBadRequest)
-		//	w.Write([]byte(err.Error()))
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 
 	err = a.showCourseHandler(w, r, assessment.Courses)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
-		/*if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("course not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}*/
 	}
 
 	err = a.showClassroomHandler(w, r, assessment.Classrooms)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
-		/*if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("classroom not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}*/
 	}
 
 	err = a.UpdateAssessment.Execute(input, assessment)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -195,17 +175,21 @@ func (a *AssessmentHandlers) UpdateAssessmentHandler(w http.ResponseWriter, r *h
 func (a *AssessmentHandlers) DeleteAssessmentHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := a.ShowAssessment.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		w.Write([]byte(err.Error()))
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 
 	err = a.DeleteAssessment.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
