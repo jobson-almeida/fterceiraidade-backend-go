@@ -114,6 +114,7 @@ func (c *StudentHandlers) UpdateStudentHandler(w http.ResponseWriter, r *http.Re
 		w.Write([]byte(e))
 		return
 	}
+
 	err = c.UpdateStudent.Execute(input, student)
 	if err != nil {
 		s, e := util.Error(err)

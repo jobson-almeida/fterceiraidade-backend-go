@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 
 	"github.com/go-chi/chi"
 )
@@ -40,29 +40,37 @@ func NewQuestionHandlers(createQuestion *usecase.CreateQuestion, selectQuestion 
 
 func (c *QuestionHandlers) CreateQuestionHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.QuestionInput
+	w.Header().Set("Content-Type", "application/json")
+
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	err = c.CreateQuestion.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *QuestionHandlers) SelectQuestionsHandler(w http.ResponseWriter, r *http.Request) {
-	output, err := c.SelectQuestion.Execute()
+	w.Header().Set("Content-Type", "application/json")
 
+	output, err := c.SelectQuestion.Execute()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	if len(output) == 0 {
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		return
 	}
@@ -74,20 +82,15 @@ func (c *QuestionHandlers) SelectQuestionsHandler(w http.ResponseWriter, r *http
 func (c *QuestionHandlers) ShowQuestionHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
+
 	output, err := c.ShowQuestion.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("question not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }
@@ -95,30 +98,30 @@ func (c *QuestionHandlers) ShowQuestionHandler(w http.ResponseWriter, r *http.Re
 func (c *QuestionHandlers) UpdateQuestionHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := c.ShowQuestion.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("question not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
 
 	var question dto.UpdateQuestionInput
 	err = json.NewDecoder(r.Body).Decode(&question)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	err = c.UpdateQuestion.Execute(input, question)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -127,24 +130,21 @@ func (c *QuestionHandlers) UpdateQuestionHandler(w http.ResponseWriter, r *http.
 func (c *QuestionHandlers) DeleteQuestionHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := c.ShowQuestion.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("question not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
 
 	err = c.DeleteQuestion.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
