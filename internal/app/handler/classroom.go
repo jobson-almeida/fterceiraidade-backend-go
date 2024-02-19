@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 
 	"github.com/go-chi/chi"
 )
@@ -41,33 +41,41 @@ func NewClassroomHandlers(createClassroom *usecase.CreateClassroom, selectClassr
 
 func (c *ClassroomHandlers) CreateClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.ClassroomInput
+	w.Header().Set("Content-Type", "application/json")
+
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	err = c.CreateClassroom.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ClassroomHandlers) SelectClassroomsHandler(w http.ResponseWriter, r *http.Request) {
-	output, err := c.SelectClassroom.Execute()
+	w.Header().Set("Content-Type", "application/json")
 
+	output, err := c.SelectClassroom.Execute()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	if len(output) == 0 {
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }
@@ -75,21 +83,15 @@ func (c *ClassroomHandlers) SelectClassroomsHandler(w http.ResponseWriter, r *ht
 func (c *ClassroomHandlers) ShowClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	output, err := c.ShowClassroom.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("classroom not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }
@@ -97,30 +99,30 @@ func (c *ClassroomHandlers) ShowClassroomHandler(w http.ResponseWriter, r *http.
 func (c *ClassroomHandlers) UpdateClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := c.ShowClassroom.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("classroom not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
 
 	var classroom dto.UpdateClassroomInput
 	err = json.NewDecoder(r.Body).Decode(&classroom)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	err = c.UpdateClassroom.Execute(input, classroom)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -129,24 +131,21 @@ func (c *ClassroomHandlers) UpdateClassroomHandler(w http.ResponseWriter, r *htt
 func (c *ClassroomHandlers) DeleteClassroomHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := c.ShowClassroom.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("classroom not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
 
 	err = c.DeleteClassroom.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)

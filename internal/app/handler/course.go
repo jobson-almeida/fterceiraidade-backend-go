@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/usecase"
+	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 
 	"github.com/go-chi/chi"
 )
@@ -41,34 +41,41 @@ func NewCourseHandlers(createCourse *usecase.CreateCourse, selectCourse *usecase
 
 func (c *CourseHandlers) CreateCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.CourseInput
+	w.Header().Set("Content-Type", "application/json")
+
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 
 	err = c.CreateCourse.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CourseHandlers) SelectCoursesHandler(w http.ResponseWriter, r *http.Request) {
-	output, err := c.SelectCourse.Execute()
+	w.Header().Set("Content-Type", "application/json")
 
+	output, err := c.SelectCourse.Execute()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	if len(output) == 0 {
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }
@@ -76,21 +83,15 @@ func (c *CourseHandlers) SelectCoursesHandler(w http.ResponseWriter, r *http.Req
 func (c *CourseHandlers) ShowCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	output, err := c.ShowCourse.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("course not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)
 }
@@ -98,30 +99,30 @@ func (c *CourseHandlers) ShowCourseHandler(w http.ResponseWriter, r *http.Reques
 func (c *CourseHandlers) UpdateCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := c.ShowCourse.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("course not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
 
 	var course dto.UpdateCourseInput
 	err = json.NewDecoder(r.Body).Decode(&course)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
+
 	err = c.UpdateCourse.Execute(input, course)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -130,24 +131,21 @@ func (c *CourseHandlers) UpdateCourseHandler(w http.ResponseWriter, r *http.Requ
 func (c *CourseHandlers) DeleteCourseHandler(w http.ResponseWriter, r *http.Request) {
 	var input dto.IDInput
 	input.ID = chi.URLParam(r, "id")
+	w.Header().Set("Content-Type", "application/json")
 
 	_, err := c.ShowCourse.Execute(input)
 	if err != nil {
-		if strings.TrimSpace(err.Error()) == "record not found" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("course not found"))
-			return
-		} else {
-			_, after, _ := strings.Cut(err.Error(), "pq: ")
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte(after))
-			return
-		}
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
+		return
 	}
 
 	err = c.DeleteCourse.Execute(input)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		s, e := util.Error(err)
+		w.WriteHeader(s)
+		w.Write([]byte(e))
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
