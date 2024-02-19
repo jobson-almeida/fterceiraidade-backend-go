@@ -11,8 +11,8 @@ type Assessment struct {
 	Description string         `json:"description" validate:"required,max=22" gorm:"type:varchar(22)"`
 	Courses     pq.StringArray `json:"courses" validate:"required" gorm:"type:text[]"`
 	Classrooms  pq.StringArray `json:"classrooms" validate:"required" gorm:"type:text[]"`
-	StartDate   string         `json:"startdate" validate:"required" gorm:"type:varchar"`
-	EndDate     string         `json:"enddate" validate:"required" gorm:"type:varchar"`
+	StartDate   string         `json:"startdate" validate:"required,date" gorm:"type:varchar"`
+	EndDate     string         `json:"enddate" validate:"required,date" gorm:"type:varchar"`
 	Quiz        []*Quiz        `json:"quiz" gorm:"serializer:json"`
 }
 

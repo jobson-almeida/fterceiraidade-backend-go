@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -24,6 +25,7 @@ func Validation(i interface{}) error {
 	validate := validator.New()
 
 	validate.RegisterValidation("phone", PhoneNumberValidation)
+	validate.RegisterValidation("date", DateValidation)
 
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
@@ -54,6 +56,8 @@ func Validation(i interface{}) error {
 				error = fmt.Sprintf("vl: %s value does not match a valid phone number", err.Value())
 			case "uuid":
 				error = fmt.Sprintf("vl: %s value does not match a valid id", err.Value())
+			case "date":
+				error = fmt.Sprintf("vl: %s value does not match a valid date", err.Value())
 			default:
 				error = fmt.Sprintf("vl: something wrong on %s", err.Field())
 			}
@@ -68,4 +72,26 @@ func PhoneNumberValidation(sl validator.FieldLevel) bool {
 	value := sl.Field().String()
 	re := regexp.MustCompile(`[+]{1}?\d{12}$`)
 	return re.MatchString(value)
+}
+
+func DateValidation(sl validator.FieldLevel) bool {
+	value := sl.Field().String()
+	if len(value) < 10 {
+		return false
+	}
+	y, _ := strconv.Atoi(value[0:4])
+	m, _ := strconv.Atoi(value[5:7])
+	d, _ := strconv.Atoi(value[8:10])
+
+	if d == 31 && (m == 4 || m == 6 || m == 9 || m == 11) {
+		return false
+	} else if m > 12 || (y == 0 || m == 0 || d == 0) {
+		return false
+	} else if d >= 30 && m == 2 {
+		return false
+	} else if m == 2 && d == 29 && !(y%4 == 0 && (y%100 != 0 || y%400 == 0)) {
+		return false
+	} else {
+		return true
+	}
 }
