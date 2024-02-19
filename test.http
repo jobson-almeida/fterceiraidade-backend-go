@@ -41,20 +41,20 @@ GET http://localhost:8888/teachers
 ### 
 GET http://localhost:8888/teachers/1acbb0ad-e900-44fa-81da-4e03f76dc77d
   
-###  
+###   
 POST http://localhost:8888/teachers
 Content-Type: application/json
   
 {
   "Avatar": "/avatar/blank.png",
-  "Firstname": "Alice",
-	"Lastname": "Brown",
-	"Email": "alice@email.com",
-	"Phone": "+5512345678",
+  "Firstname": "Alice1",
+	"Lastname": "Brown1",
+	"Email": "alice1@email.com",
+	"Phone": "+557312345678",
 	"Address": {
-	  "City": "city", 
-	  "State": "state", 
-    "Street": "street"
+	  "City": "city1", 
+	  "State": "state1", 
+    "Street": "street1"
   }      
 }  
     
@@ -77,7 +77,7 @@ Content-Type: application/json
 }
   
 ### DELETE
-DELETE http://localhost:8888/teachers/046e675f-e364-4fbc-a36d-865010c20fc4
+DELETE http://localhost:8888/teachers/44fa3602-d279-4725-8c31-84d15976d02d
 
 //-------------------------
        
