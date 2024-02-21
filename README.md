@@ -45,10 +45,8 @@ docker compose up
 &nbsp;
 
 ### Executando os endpoints da aplicação
-
-```dosini
 Utilize o arquivo test.http (Rest Client) presente na raiz do projeto ou outra plataforma de sua preferência. Endpoints de exemplos estão contidos no arquivo.
-```
+
 
 &nbsp;
 &nbsp;
