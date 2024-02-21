@@ -28,6 +28,10 @@ Estudo de backend em GO, que tem como proposta gerenciar os dados referentes aos
   <a href="https://www.docker.com/" target="_blank" rel="noreferrer">
     <img src="https://cdn.worldvectorlogo.com/logos/docker-4.svg" alt="docker" title="docker" width="40" height="40" />
   </a>
+  &nbsp;
+  <a href="https://www.postgresql.org/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-plain.svg" alt="postgres" title="postgres" width="40" height="40" />
+  </a>
 </p>
  
 &nbsp;
