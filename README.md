@@ -2,7 +2,7 @@
 &nbsp;
 ### Description
 
-Estudo de backend em GO, opcional, em suporte a iniciativa FTerceiraIdade (https://github.com/jobson-almeida/fterceiraidade-frontend)
+Estudo de backend em GO, que tem como proposta gerenciar os dados referentes aos usuários do sistema (professores e estudantes), aos cursos e turmas a eles relacionados. Por fim, gerir questões individualmente definidas que poderão ser utilizadas em um processo de avaliações personalizáveis. Uma API opcional em suporte ao frontend FTerceiraIdade - https://github.com/jobson-almeida/fterceiraidade-frontend.
 
 
 &nbsp;
