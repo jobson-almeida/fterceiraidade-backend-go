@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"time"
+
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
@@ -33,12 +35,15 @@ func (s *ShowAssessment) Execute(input dto.IDInput) (*dto.AssessmentOutput, erro
 		})
 	}
 
+	startDate := time.Time(res.StartDate).Format(time.DateOnly)
+	endDate := time.Time(res.EndDate).Format(time.DateOnly)
+
 	output := &dto.AssessmentOutput{
 		ID:         res.ID,
 		Courses:    res.Courses,
 		Classrooms: res.Classrooms,
-		StartDate:  res.StartDate,
-		EndDate:    res.EndDate,
+		StartDate:  startDate,
+		EndDate:    endDate,
 		Quiz:       quiz,
 	}
 	return output, nil

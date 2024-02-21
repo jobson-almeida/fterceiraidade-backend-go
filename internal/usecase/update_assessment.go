@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"time"
+
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
@@ -28,12 +30,15 @@ func (u *UpdateAssessment) Execute(where dto.IDInput, data dto.UpdateAssessmentI
 		})
 	}
 
+	startDate, _ := time.Parse(time.DateOnly, data.StartDate)
+	endDate, _ := time.Parse(time.DateOnly, data.EndDate)
+
 	assessment, err := entity.UpdateAssessment(
 		data.Description,
 		data.Courses,
 		data.Classrooms,
-		data.StartDate,
-		data.EndDate,
+		startDate,
+		endDate,
 		quiz,
 	)
 

@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/util"
 	"github.com/lib/pq"
@@ -11,14 +13,14 @@ type Assessment struct {
 	Description string         `json:"description" validate:"required,max=22" gorm:"type:varchar(22)"`
 	Courses     pq.StringArray `json:"courses" validate:"required" gorm:"type:text[]"`
 	Classrooms  pq.StringArray `json:"classrooms" validate:"required" gorm:"type:text[]"`
-	StartDate   string         `json:"startdate" validate:"required,date" gorm:"type:varchar"`
-	EndDate     string         `json:"enddate" validate:"required,date" gorm:"type:varchar"`
+	StartDate   time.Time      `json:"startdate" validate:"required" gorm:"type:date"`
+	EndDate     time.Time      `json:"enddate" validate:"required,gtefield=StartDate" gorm:"type:date"`
 	Quiz        []*Quiz        `json:"quiz" gorm:"serializer:json"`
 }
 
 func init() {}
 
-func NewAssessment(description string, courses pq.StringArray, classrooms pq.StringArray, startDate string, endDate string, quiz []*Quiz) (*Assessment, error) {
+func NewAssessment(description string, courses pq.StringArray, classrooms pq.StringArray, startDate time.Time, endDate time.Time, quiz []*Quiz) (*Assessment, error) {
 	var questions []*Quiz
 	for _, r := range quiz {
 		questions = append(questions, &Quiz{
@@ -45,7 +47,7 @@ func NewAssessment(description string, courses pq.StringArray, classrooms pq.Str
 	return assessment, nil
 }
 
-func UpdateAssessment(description string, courses pq.StringArray, classrooms pq.StringArray, startDate string, endDate string, quiz []*Quiz) (*Assessment, error) {
+func UpdateAssessment(description string, courses pq.StringArray, classrooms pq.StringArray, startDate time.Time, endDate time.Time, quiz []*Quiz) (*Assessment, error) {
 	var questions []*Quiz
 	for _, r := range quiz {
 		questions = append(questions, &Quiz{

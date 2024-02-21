@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"time"
+
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/dto"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
@@ -31,13 +33,16 @@ func (s *SelectAssessments) Execute() ([]*dto.AssessmentOutput, error) {
 			})
 		}
 
+		startDate := time.Time(r.StartDate).Format(time.DateOnly)
+		endDate := time.Time(r.EndDate).Format(time.DateOnly)
+
 		output = append(output, &dto.AssessmentOutput{
 			ID:          r.ID,
 			Description: r.Description,
 			Courses:     r.Courses,
 			Classrooms:  r.Classrooms,
-			StartDate:   r.StartDate,
-			EndDate:     r.EndDate,
+			StartDate:   startDate,
+			EndDate:     endDate,
 			Quiz:        quiz,
 		})
 
