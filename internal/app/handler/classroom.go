@@ -11,7 +11,6 @@ import (
 	"github.com/go-chi/chi"
 )
 
-// adapter
 type ClassroomHandlers struct {
 	CreateClassroom *usecase.CreateClassroom
 	SelectClassroom *usecase.SelectClassrooms

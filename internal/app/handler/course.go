@@ -11,7 +11,6 @@ import (
 	"github.com/go-chi/chi"
 )
 
-// adapter
 type CourseHandlers struct {
 	CreateCourse *usecase.CreateCourse
 	SelectCourse *usecase.SelectCourses

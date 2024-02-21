@@ -202,7 +202,7 @@ DELETE http://localhost:8888/classrooms/0d6b485a-efca-4e5d-af0e-7c769a0d6874
 GET http://localhost:8888/assessments
         
 ###   
-GET http://localhost:8888/assessments/2eaab477-6e77-4f19-90fa-b5e30e43af11
+GET http://localhost:8888/assessments/b34750a4-072d-412b-89d3-8251b777d6c2
       
 ###           
 POST http://localhost:8888/assessments
@@ -249,4 +249,4 @@ Content-Type: application/json
 }
  
 ### DELETE
-DELETE http://localhost:8888/assessments/0d6b485a-efca-4e5d-af0e-7c769a0d6874
+DELETE http://localhost:8888/assessments/857cbabb-4035-43aa-8324-d924a0124b07
