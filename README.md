@@ -24,6 +24,10 @@ Estudo de backend em GO, que tem como proposta gerenciar os dados referentes aos
       height="40"
     />
   </a>
+  &nbsp;
+  <a href="https://www.docker.com/" target="_blank" rel="noreferrer">
+    <img src="https://cdn.worldvectorlogo.com/logos/docker-4.svg" alt="docker" title="docker" width="40" height="40" />
+  </a>
 </p>
  
 &nbsp;
