@@ -12,9 +12,9 @@ POST http://localhost:8888/courses
 Content-Type: application/json
   
  {
-   "Name": "Course A",
-   "Description": "Course A Full Advanced",
-   "Image": "/assets/images/blank.png"
+   "name": "course A",
+   "description": "course A Full Advanced",
+   "image": "/assets/images/blank.png"
  }
  
  
@@ -23,9 +23,9 @@ PUT http://localhost:8888/courses/98773285-eec0-45b1-88f4-9018abdb1cbd
 Content-Type: application/json
  
  {
-   "Name": "Course A",
-   "Description": "Course A Full Advanced",
-   "Image": "/assets/images/blank.png"
+   "name": "course A",
+   "description": "course A Full Advanced",
+   "image": "/assets/images/blank.png"
  }
   
 ### DELETE
@@ -46,15 +46,15 @@ POST http://localhost:8888/teachers
 Content-Type: application/json
   
 {
-  "Avatar": "/avatar/blank.png",
-  "Firstname": "Alice1",
-	"Lastname": "Brown1",
-	"Email": "alice1@email.com",
-	"Phone": "+557312345678",
-	"Address": {
-	  "City": "city1", 
-	  "State": "state1", 
-    "Street": "street1"
+  "avatar": "/avatar/blank.png",
+  "firstname": "Alice1",
+	"lastname": "Brown1",
+	"email": "alice1@email.com",
+	"phone": "+557312345678",
+	"address": {
+	  "city": "city1", 
+	  "state": "state1", 
+    "street": "street1"
   }      
 }   
      
@@ -64,15 +64,15 @@ PUT http://localhost:8888/teachers/1acbb0ad-e900-44fa-81da-4e03f76dc77d
 Content-Type: application/json
  
  {
-  "Avatar": "/avatar/blank.png",
-  "Firstname": "Alice",
-	"Lastname": "Brown",
-	"Email": "alice@email.com",
-	"Phone": "+557312345678",
-	"Address": {
-	  "City": "city", 
-	  "State": "state", 
-    "Street": "street"
+  "avatar": "/avatar/blank.png",
+  "firstname": "Alice",
+	"lastname": "Brown",
+	"email": "alice@email.com",
+	"phone": "+557312345678",
+	"address": {
+	  "city": "city", 
+	  "state": "state", 
+    "street": "street"
   }
 }
   
@@ -92,15 +92,15 @@ POST http://localhost:8888/students
 Content-Type: application/json
   
 {
-  "Avatar": "/avatar/blank.png",
-  "Firstname": "Rebecca",
-	"Lastname": "Green",
-	"Email": "rebecca1@email.com",
-	"Phone": "+5512345678",
-	"Address": {
-	  "City": "city", 
-	  "State": "state", 
-    "Street": "street"
+  "avatar": "/avatar/blank.png",
+  "firstname": "Rebecca",
+	"lastname": "Green",
+	"email": "rebecca1@email.com",
+	"phone": "+5512345678",
+	"address": {
+	  "city": "city", 
+	  "state": "state", 
+    "street": "street"
   }
 } 
      
@@ -109,15 +109,15 @@ PUT http://localhost:8888/students/fe79e05c-6180-4bb8-98c5-2b9d1d3aef10
 Content-Type: application/json
  
  {
-  "Avatar": "/avatar/blank.png",
-  "Firstname": "Rebecca",
-	"Lastname": "Green",
-	"Email": "rebecca3@email.com",
-	"Phone": "+557312345678",
-	"Address": {
-	  "City": "City", 
-	  "State": "State", 
-    "Street": "Street"
+  "avatar": "/avatar/blank.png",
+  "firstname": "Rebecca",
+	"lastname": "Green",
+	"email": "rebecca3@email.com",
+	"phone": "+557312345678",
+	"address": {
+	  "city": "City", 
+	  "state": "state", 
+    "street": "Street"
   }
 } 
   
@@ -137,12 +137,12 @@ POST http://localhost:8888/questions
 Content-Type: application/json
   
 {
-  "Questioning": "Pergunta específica sobre",
-	"Type": "objetiva",
-  "Image": "/avatar/blank.png",
-	"Alternatives": ["(a) alternativa a", "(b) alternativa b", "(c) alternativa c"],
-	"Answer": "Resposta sobre a pergunta específica",
-	"Discipline": "Lógica de programação"
+  "questioning": "Pergunta específica sobre",
+	"type": "objetiva",
+  "image": "/avatar/blank.png",
+	"alternatives": ["(a) alternativa a", "(b) alternativa b", "(c) alternativa c"],
+	"answer": "Resposta sobre a pergunta específica",
+	"discipline": "Lógica de programação"
 }
 
 ### 
@@ -150,16 +150,16 @@ PUT http://localhost:8888/questions/0def932d-01fa-4e8c-be1b-b4694b6fc115
 Content-Type: application/json
  
 {
-  "Questioning": "Pergunta específica sobre",
-	"Type": "objetiva",
-  "Image": "",
-	"Alternatives": [
+  "questioning": "Pergunta específica sobre",
+	"type": "objetiva",
+  "image": "",
+	"alternatives": [
 		"(a) alternativa a",
 		"(b) alternativa b",
 		"(c) alternativa c"
 	],
-	"Answer": "",
-	"Discipline": "Lógica de programação"
+	"answer": "",
+	"discipline": "Lógica de programação"
 }
   
 ### DELETE
@@ -178,9 +178,9 @@ POST http://localhost:8888/classrooms
 Content-Type: application/json
    
 {
-  "Name": "Classroom A",
-  "Description": "Classroom A Full Advanced",
-  "Course": "98773285-eec0-45b1-88f4-9018abdb1cbd"
+  "name": "Classroom A",
+  "description": "Classroom A Full Advanced",
+  "course": "98773285-eec0-45b1-88f4-9018abdb1cbd"
 }
 
 ### 
@@ -188,9 +188,9 @@ PUT http://localhost:8888/classrooms/1d6b485a-efca-4e5d-af0e-7c769a0d6874
 Content-Type: application/json
  
 {
-  "Name": "Classroom A",
-  "Description": "Classroom A Full Advanced",
-  "Course": "b17d9cf7-1618-4237-9dad-7517a8a3839d"
+  "name": "Classroom A",
+  "description": "Classroom A Full Advanced",
+  "course": "b17d9cf7-1618-4237-9dad-7517a8a3839d"
 }
   
 ### DELETE
@@ -209,19 +209,19 @@ POST http://localhost:8888/assessments
 Content-Type: application/json
 
 {
-	"Description": "Assessment description",
-	"Courses": ["98773285-eec0-45b1-88f4-9018abdb1cbd"],
-	"Classrooms": ["27986656-fd2a-4c87-9f67-33dba2ff8b10"],
-	"StartDate": "2024-02-08",
-	"EndDate": "2024-02-30",
-	"Quiz": [
+	"description": "Assessment description",
+	"courses": ["98773285-eec0-45b1-88f4-9018abdb1cbd"],
+	"classrooms": ["27986656-fd2a-4c87-9f67-33dba2ff8b10"],
+	"start_date": "2024-02-18",
+	"end_date": "2024-02-19",
+	"quiz": [
 		{
 			"ID": "1d6b485a-efca-4e5d-af0e-7c769a0d6874",
-			"Value": 14
+			"value": 14
 		},
 		{
 			"ID": "b17d9cf7-1618-4237-9dad-7517a8a3839d",
-			"Value": 71
+			"value": 71
 		}
 	]
 }  
@@ -231,19 +231,19 @@ PUT http://localhost:8888/assessments/2eaab477-6e77-4f19-90fa-b5e30e43af11
 Content-Type: application/json
  
 {
-	"Description": "Assessment description",
-	"Courses": ["98773285-eec0-45b1-88f4-9018abdb1cbd", "98773285-eec0-45b1-88f4-9018abdb1cbd"],
-	"Classrooms": ["27986656-fd2a-4c87-9f67-33dba2ff8b10"],
-	"StartDate": "2024-01-29",
-	"EndDate": "2024-02-03",
-	"Quiz": [
+	"description": "Assessment description",
+	"courses": ["98773285-eec0-45b1-88f4-9018abdb1cbd", "98773285-eec0-45b1-88f4-9018abdb1cbd"],
+	"classrooms": ["27986656-fd2a-4c87-9f67-33dba2ff8b10"],
+	"start_date": "2024-01-29",
+	"end_date": "2024-02-03",
+	"quiz": [
 		{
 			"ID": "1d6b485a-efca-4e5d-af0e-7c769a0d6874",
-			"Value": 14
+			"value": 14
 		},
 		{
 			"ID": "b17d9cf7-1618-4237-9dad-7517a8a3839d",
-			"Value": 71
+			"value": 71
 		}
 	]
 }
