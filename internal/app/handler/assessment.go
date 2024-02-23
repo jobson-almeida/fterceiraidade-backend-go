@@ -102,6 +102,7 @@ func (a *AssessmentHandlers) SelectAssessmentsHandler(w http.ResponseWriter, r *
 
 	if len(output) == 0 {
 		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("[]"))
 		return
 	}
 	w.WriteHeader(http.StatusOK)
