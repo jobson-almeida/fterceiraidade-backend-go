@@ -55,7 +55,8 @@ Utilize o arquivo test.http (Rest Client) presente na raiz do projeto ou outra p
 
 &nbsp;
 
-### Opcional: caso seja de interesse usar o frontend FTerceiraIdade deverá configurar o arquivo .env.local alterando a porta para 8888.
+### Opcional 
+Caso seja de interesse usar o frontend FTerceiraIdade deverá configurar o arquivo .env.local alterando a porta para 8888.
 
 ```dosini
 API_URL_BASE=http://localhost:8888
