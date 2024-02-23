@@ -50,7 +50,7 @@ docker compose up
 ```
 &nbsp;
 
-### Criar ou configurar o arquivo .env.local do frontend (FTerceiraIdade) com a nova url base
+### Opcional: criar ou configurar o arquivo .env.local do frontend (FTerceiraIdade) com a nova url base
 
 ```dosini
 API_URL_BASE=http://localhost:8888
