@@ -36,23 +36,28 @@ Estudo de backend em GO, que tem como proposta gerenciar os dados referentes aos
  
 &nbsp;
 
-### Instalação das dependências
+### Instalar dependências
 
 ```dosini
 go mod tidy
 ```
-
 &nbsp;
 
-### Criação e execução do container do banco de dados
+### Criar e executar o container do banco de dados
 
 ```dosini
 docker compose up
 ```
-
 &nbsp;
 
-### Executando os endpoints da aplicação
+### Criar ou configurar o arquivo .env.local do frontend (FTerceiraIdade) com a nova url base
+
+```dosini
+API_URL_BASE=http://localhost:8888
+```
+&nbsp;
+
+### Executar os endpoints da aplicação
 Utilize o arquivo test.http (Rest Client) presente na raiz do projeto ou outra plataforma de sua preferência. Endpoints de exemplos estão contidos no arquivo.
 
 
