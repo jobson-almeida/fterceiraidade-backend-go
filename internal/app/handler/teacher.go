@@ -72,6 +72,7 @@ func (c *TeacherHandlers) SelectTeachersHandler(w http.ResponseWriter, r *http.R
 	}
 	if len(output) == 0 {
 		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("[]"))
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -88,6 +89,7 @@ func (c *TeacherHandlers) ShowTeacherHandler(w http.ResponseWriter, r *http.Requ
 		s, e := util.Error(err)
 		w.WriteHeader(s)
 		w.Write([]byte(e))
+		return
 	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(output)

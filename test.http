@@ -35,11 +35,11 @@ DELETE http://localhost:8888/courses/76b6ccef-3a3f-4a31-b302-21b01c286e12
 //-------------------------
 
       
-### 
+###     
 GET http://localhost:8888/teachers
    
 ### 
-GET http://localhost:8888/teachers/1acbb0ad-e900-44fa-81da-4e03f76dc77d
+GET http://localhost:8888/teachers/f0a97586-4113-4252-8493-fb2528141cc7
   
 ###   
 POST http://localhost:8888/teachers
@@ -47,14 +47,14 @@ Content-Type: application/json
   
 {
   "avatar": "/avatar/blank.png",
-  "firstname": "Alice1",
-	"lastname": "Brown1",
-	"email": "alice1@email.com",
+  "firstname": "Alice",
+	"lastname": "Brown",
+	"email": "alice@email.com",
 	"phone": "+557312345678",
 	"address": {
-	  "city": "city1", 
-	  "state": "state1", 
-    "street": "street1"
+	  "city": "City", 
+	  "state": "State", 
+    "street": "Street"
   }      
 }   
      
@@ -77,7 +77,7 @@ Content-Type: application/json
 }
   
 ### DELETE
-DELETE http://localhost:8888/teachers/44fa3602-d279-4725-8c31-84d15976d02d
+DELETE http://localhost:8888/teachers/1acbb0ad-e900-44fa-81da-4e03f76dc77d
 
 //-------------------------
        
@@ -204,7 +204,7 @@ GET http://localhost:8888/assessments
 ###   
 GET http://localhost:8888/assessments/b34750a4-072d-412b-89d3-8251b777d6c2
       
-###           
+### 
 POST http://localhost:8888/assessments
 Content-Type: application/json
 
@@ -212,8 +212,8 @@ Content-Type: application/json
 	"description": "Assessment description",
 	"courses": ["98773285-eec0-45b1-88f4-9018abdb1cbd"],
 	"classrooms": ["27986656-fd2a-4c87-9f67-33dba2ff8b10"],
-	"start_date": "2024-02-18",
-	"end_date": "2024-02-19",
+	"start_date": "2024-03-18",
+	"end_date": "2024-03-19",
 	"quiz": [
 		{
 			"ID": "1d6b485a-efca-4e5d-af0e-7c769a0d6874",

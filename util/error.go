@@ -9,7 +9,7 @@ func Error(err error) (int, string) {
 	s := 200
 
 	if strings.TrimSpace(err.Error()) == "record not found" {
-		e = ""
+		e = "{}"
 		s = 404
 	} else if strings.Contains(err.Error(), "vl: ") {
 		e = strings.Replace(err.Error(), "vl: ", "", 1)
