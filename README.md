@@ -43,6 +43,15 @@ go mod tidy
 ```
 &nbsp;
 
+### Criação do arquivo .env e variavéis
+
+```dosini
+DIALECT=postgres
+CONNECTION="postgres://postgres:postgres@localhost/fterceiraidade_backend_go?sslmode=disable"
+```
+
+&nbsp;
+
 ### Criar e executar o container do banco de dados
 
 ```dosini
