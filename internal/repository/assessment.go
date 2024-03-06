@@ -63,7 +63,13 @@ func (a *AssessmentRepository) Update(input *entity.InputID, assessment *entity.
 
 func (a *AssessmentRepository) Delete(input *entity.InputID) error {
 	assessment := &entity.Assessment{}
-	res := a.db.Delete(&assessment, "id = ?", input.ID)
+
+	res := a.db.First(&assessment, "id = ?", input.ID)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	res = a.db.Delete(&assessment, "id = ?", input.ID)
 	if res.Error != nil {
 		return res.Error
 	}
