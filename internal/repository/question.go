@@ -65,7 +65,13 @@ func (q *QuestionRepository) Update(input *entity.InputID, question *entity.Ques
 
 func (q *QuestionRepository) Delete(input *entity.InputID) error {
 	question := &entity.Question{}
-	res := q.db.Delete(&question, "id = ?", input.ID)
+
+	res := q.db.First(&question, "id = ?", input.ID)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	res = q.db.Delete(&question, "id = ?", input.ID)
 	if res.Error != nil {
 		return res.Error
 	}
