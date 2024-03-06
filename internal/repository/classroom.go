@@ -62,7 +62,13 @@ func (c *ClassroomRepository) Update(input *entity.InputID, classroom *entity.Cl
 
 func (c *ClassroomRepository) Delete(input *entity.InputID) error {
 	classroom := &entity.Classroom{}
-	res := c.db.Delete(&classroom, "id = ?", input.ID)
+
+	res := c.db.First(&classroom, "id = ?", input.ID)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	res = c.db.Delete(&classroom, "id = ?", input.ID)
 	if res.Error != nil {
 		return res.Error
 	}
