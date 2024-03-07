@@ -96,6 +96,7 @@ func (suite *TeacherRepoTestSuite) TestCreateTeacher() {
 
 	suite.teacher, err = entity.NewInputID(teacher.ID)
 	assert.NoError(t, err)
+	suite.created = true
 }
 
 func (suite *TeacherRepoTestSuite) TestShowTeacher() {
@@ -112,6 +113,7 @@ func (suite *TeacherRepoTestSuite) TestShowTeacher() {
 	assert.Equal(t, "City", currentTeacher.Address.City)
 	assert.Equal(t, "State", currentTeacher.Address.State)
 	assert.Equal(t, "Street", currentTeacher.Address.Street)
+	suite.showed = true
 }
 
 func (suite *TeacherRepoTestSuite) TestUpdateTeacher() {
@@ -143,6 +145,7 @@ func (suite *TeacherRepoTestSuite) TestUpdateTeacher() {
 	assert.Equal(t, "New City", updateTeacher.Address.City)
 	assert.Equal(t, "New State", updateTeacher.Address.State)
 	assert.Equal(t, "New Street", updateTeacher.Address.Street)
+	suite.updated = true
 }
 
 func TestTeacherRepoTestSuite(t *testing.T) {
