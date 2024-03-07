@@ -73,7 +73,13 @@ func (t *TeacherRepository) Update(input *entity.InputID, teacher *entity.Teache
 
 func (t *TeacherRepository) Delete(input *entity.InputID) error {
 	teacher := &entity.Teacher{}
-	res := t.db.Delete(&teacher, "id = ?", input.ID)
+
+	res := t.db.First(&teacher, "id = ?", input.ID)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	res = t.db.Delete(&teacher, "id = ?", input.ID)
 	if res.Error != nil {
 		return res.Error
 	}
