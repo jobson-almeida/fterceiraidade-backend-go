@@ -19,7 +19,7 @@ type ClassroomRepository struct {
 	db *gorm.DB
 }
 
-func NewClassroomRepository(db *gorm.DB) IClassroomRepository {
+func NewClassroomRepository(db *gorm.DB) *ClassroomRepository {
 	return &ClassroomRepository{db: db}
 }
 
