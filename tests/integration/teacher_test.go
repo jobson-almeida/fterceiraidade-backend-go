@@ -10,6 +10,7 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/tests/testhelpers"
 	"github.com/joho/godotenv"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	pg "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -51,6 +52,29 @@ func (suite *TeacherRepoTestSuite) TearDownSuite() {
 	if err := suite.container.Terminate(suite.ctx); err != nil {
 		log.Fatalf("error terminating postgres container: %s", err)
 	}
+}
+
+func (suite *TeacherRepoTestSuite) TestCreateTeacher() {
+	t := suite.T()
+
+	address := entity.DetailsAddress{City: "City", State: "State", Street: "Street"}
+	teacher, err := entity.NewTeacher(
+		"/avatar/avatar.png",
+		"Firstname",
+		"Lastname",
+		"email@email.com",
+		"+998812345678",
+		address,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.repository.Create(teacher)
+	assert.NoError(t, err)
+
+	//suite.teacher, err = entity.NewInputID(teacher.ID)
+	//assert.NoError(t, err)
 }
 
 func TestTeacherRepoTestSuite(t *testing.T) {
