@@ -10,6 +10,7 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/tests/testhelpers"
 	"github.com/joho/godotenv"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	pg "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -58,6 +59,26 @@ func (suite *CourseRepoTestSuite) TearDownSuite() {
 }
 
 func (suite *CourseRepoTestSuite) AfterTest(_, _ string) {
+}
+
+func (suite *CourseRepoTestSuite) TestCreateCourse() {
+	t := suite.T()
+
+	course, err := entity.NewCourse(
+		"Name",
+		"Description",
+		"/image/image.png",
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.repository.Create(course)
+	assert.NoError(t, err)
+	assert.NotNil(t, course)
+
+	suite.course, err = entity.NewInputID(course.ID)
+	assert.NoError(t, err)
 }
 
 func TestCourseRepoTestSuite(t *testing.T) {
