@@ -93,6 +93,17 @@ func (suite *ClassroomRepoTestSuite) TestCreateClassroom() {
 	suite.course = course.ID
 }
 
+func (suite *ClassroomRepoTestSuite) TestShowClassroom() {
+	t := suite.T()
+
+	currentClassroom, err := suite.repository.Show(suite.classroom)
+	assert.NoError(t, err)
+	assert.NotNil(t, currentClassroom)
+	assert.Equal(t, "Name", currentClassroom.Name)
+	assert.Equal(t, "Description", currentClassroom.Description)
+	assert.Equal(t, suite.course, currentClassroom.Course)
+}
+
 func TestClassroomRepoTestSuite(t *testing.T) {
 	suite.Run(t, new(ClassroomRepoTestSuite))
 }
