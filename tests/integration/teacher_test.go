@@ -22,6 +22,9 @@ type TeacherRepoTestSuite struct {
 	repository *repository.TeacherRepository
 	ctx        context.Context
 	teacher    *entity.InputID
+	created    bool
+	showed     bool
+	updated    bool
 }
 
 func (suite *TeacherRepoTestSuite) SetupSuite() {
@@ -52,6 +55,23 @@ func (suite *TeacherRepoTestSuite) SetupSuite() {
 func (suite *TeacherRepoTestSuite) TearDownSuite() {
 	if err := suite.container.Terminate(suite.ctx); err != nil {
 		log.Fatalf("error terminating postgres container: %s", err)
+	}
+}
+
+func (suite *TeacherRepoTestSuite) AfterTest(_, _ string) {
+	if suite.created == true && suite.showed == true && suite.updated == true {
+		t := suite.T()
+		t.Run("delete teacher", func(t *testing.T) {
+			id, err := entity.NewInputID(suite.teacher.ID)
+			assert.NoError(t, err)
+
+			err = suite.repository.Delete(id)
+			assert.NoError(t, err)
+
+			currentTeacher, err := suite.repository.Show(id)
+			assert.Error(t, err)
+			assert.Nil(t, currentTeacher)
+		})
 	}
 }
 
