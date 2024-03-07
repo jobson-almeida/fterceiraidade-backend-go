@@ -23,8 +23,8 @@ type StudentRepoTestSuite struct {
 	ctx        context.Context
 	student    *entity.InputID
 	created    bool
-	//showed     bool
-	//updated    bool
+	showed     bool
+	updated    bool
 }
 
 func (suite *StudentRepoTestSuite) SetupSuite() {
@@ -83,6 +83,55 @@ func (suite *StudentRepoTestSuite) TestCreateStudent() {
 	suite.student, err = entity.NewInputID(student.ID)
 	assert.NoError(t, err)
 	suite.created = true
+}
+
+func (suite *StudentRepoTestSuite) TestShowStudent() {
+	t := suite.T()
+
+	currentStudent, err := suite.repository.Show(suite.student)
+	assert.NoError(t, err)
+	assert.NotNil(t, currentStudent)
+	assert.Equal(t, "/avatar/avatar.png", currentStudent.Avatar)
+	assert.Equal(t, "Firstname", currentStudent.Firstname)
+	assert.Equal(t, "Lastname", currentStudent.Lastname)
+	assert.Equal(t, "email@email.com", currentStudent.Email)
+	assert.Equal(t, "+998812345678", currentStudent.Phone)
+	assert.Equal(t, "City", currentStudent.Address.City)
+	assert.Equal(t, "State", currentStudent.Address.State)
+	assert.Equal(t, "Street", currentStudent.Address.Street)
+	suite.showed = true
+}
+
+func (suite *StudentRepoTestSuite) TestUpdateStudent() {
+	t := suite.T()
+
+	newAddress := entity.DetailsAddress{
+		City: "New City", State: "New State", Street: "New Street",
+	}
+
+	updateStudent, err := entity.UpdateStudent(
+		"/avatar/new_avatar.png",
+		"New Firstname",
+		"New Lastname",
+		"new_email@email.com",
+		"+008812345678",
+		newAddress,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.repository.Update(suite.student, updateStudent)
+	assert.NoError(t, err)
+	assert.Equal(t, "/avatar/new_avatar.png", updateStudent.Avatar)
+	assert.Equal(t, "New Firstname", updateStudent.Firstname)
+	assert.Equal(t, "New Lastname", updateStudent.Lastname)
+	assert.Equal(t, "new_email@email.com", updateStudent.Email)
+	assert.Equal(t, "+008812345678", updateStudent.Phone)
+	assert.Equal(t, "New City", updateStudent.Address.City)
+	assert.Equal(t, "New State", updateStudent.Address.State)
+	assert.Equal(t, "New Street", updateStudent.Address.Street)
+	suite.updated = true
 }
 
 func TestStudentRepoTestSuite(t *testing.T) {
