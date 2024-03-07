@@ -81,6 +81,17 @@ func (suite *CourseRepoTestSuite) TestCreateCourse() {
 	assert.NoError(t, err)
 }
 
+func (suite *CourseRepoTestSuite) TestShowCourse() {
+	t := suite.T()
+
+	currentCourse, err := suite.repository.Show(suite.course)
+	assert.NoError(t, err)
+	assert.NotNil(t, currentCourse)
+	assert.Equal(t, "Name", currentCourse.Name)
+	assert.Equal(t, "Description", currentCourse.Description)
+	assert.Equal(t, "/image/image.png", currentCourse.Image)
+}
+
 func TestCourseRepoTestSuite(t *testing.T) {
 	suite.Run(t, new(CourseRepoTestSuite))
 }
