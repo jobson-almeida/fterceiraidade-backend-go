@@ -10,6 +10,7 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/tests/testhelpers"
 	"github.com/joho/godotenv"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	pg "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -20,6 +21,7 @@ type ClassroomRepoTestSuite struct {
 	container  *testhelpers.DatabaseContainer
 	repository *repository.ClassroomRepository
 	ctx        context.Context
+	course     string
 	classroom  *entity.InputID
 	// created    bool
 	// showed     bool
@@ -58,6 +60,37 @@ func (suite *ClassroomRepoTestSuite) TearDownSuite() {
 }
 
 func (suite *ClassroomRepoTestSuite) AfterTest(_, _ string) {
+}
+
+func (suite *ClassroomRepoTestSuite) TestCreateClassroom() {
+	t := suite.T()
+
+	course, err := entity.NewCourse(
+		"Name",
+		"Description",
+		"/image/image.png",
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	classroom, err := entity.NewClassroom(
+		"Name",
+		"Description",
+		course.ID,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.repository.Create(classroom)
+	assert.NoError(t, err)
+	assert.NotNil(t, classroom)
+
+	suite.classroom, err = entity.NewInputID(classroom.ID)
+	assert.NoError(t, err)
+
+	suite.course = course.ID
 }
 
 func TestClassroomRepoTestSuite(t *testing.T) {
