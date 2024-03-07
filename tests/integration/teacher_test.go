@@ -94,6 +94,37 @@ func (suite *TeacherRepoTestSuite) TestShowTeacher() {
 	assert.Equal(t, "Street", currentTeacher.Address.Street)
 }
 
+func (suite *TeacherRepoTestSuite) TestUpdateTeacher() {
+	t := suite.T()
+
+	newAddress := entity.DetailsAddress{
+		City: "New City", State: "New State", Street: "New Street",
+	}
+
+	updateTeacher, err := entity.UpdateTeacher(
+		"/avatar/new_avatar.png",
+		"New Firstname",
+		"New Lastname",
+		"new_email@email.com",
+		"+008812345678",
+		newAddress,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.repository.Update(suite.teacher, updateTeacher)
+	assert.NoError(t, err)
+	assert.Equal(t, "/avatar/new_avatar.png", updateTeacher.Avatar)
+	assert.Equal(t, "New Firstname", updateTeacher.Firstname)
+	assert.Equal(t, "New Lastname", updateTeacher.Lastname)
+	assert.Equal(t, "new_email@email.com", updateTeacher.Email)
+	assert.Equal(t, "+008812345678", updateTeacher.Phone)
+	assert.Equal(t, "New City", updateTeacher.Address.City)
+	assert.Equal(t, "New State", updateTeacher.Address.State)
+	assert.Equal(t, "New Street", updateTeacher.Address.Street)
+}
+
 func TestTeacherRepoTestSuite(t *testing.T) {
 	suite.Run(t, new(TeacherRepoTestSuite))
 }
