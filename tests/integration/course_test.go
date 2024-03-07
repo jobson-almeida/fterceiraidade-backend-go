@@ -92,6 +92,26 @@ func (suite *CourseRepoTestSuite) TestShowCourse() {
 	assert.Equal(t, "/image/image.png", currentCourse.Image)
 }
 
+func (suite *CourseRepoTestSuite) TestUpdateCourse() {
+	t := suite.T()
+
+	newCourse, err := entity.UpdateCourse(
+		"New Name",
+		"New Description",
+		"/image/new_image.png",
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.repository.Update(suite.course, newCourse)
+	assert.NoError(t, err)
+	assert.NotNil(t, newCourse)
+	assert.NotEqual(t, "Name", newCourse.Name)
+	assert.NotEqual(t, "Description", newCourse.Description)
+	assert.NotEqual(t, "/image/image.png", newCourse.Image)
+}
+
 func TestCourseRepoTestSuite(t *testing.T) {
 	suite.Run(t, new(CourseRepoTestSuite))
 }
