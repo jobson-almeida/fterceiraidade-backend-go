@@ -59,6 +59,20 @@ func (suite *StudentRepoTestSuite) TearDownSuite() {
 }
 
 func (suite *StudentRepoTestSuite) AfterTest(_, _ string) {
+	if suite.created == true && suite.showed == true && suite.updated == true {
+		t := suite.T()
+		t.Run("delete student", func(t *testing.T) {
+			id, err := entity.NewInputID(suite.student.ID)
+			assert.NoError(t, err)
+
+			err = suite.repository.Delete(id)
+			assert.NoError(t, err)
+
+			currentStudent, err := suite.repository.Show(id)
+			assert.Error(t, err)
+			assert.Nil(t, currentStudent)
+		})
+	}
 }
 
 func (suite *StudentRepoTestSuite) TestCreateStudent() {
