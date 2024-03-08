@@ -32,6 +32,9 @@ type AssessmentRepoTestSuite struct {
 	question             *entity.Question
 	assessment           *entity.Assessment
 	quiz                 []*entity.Quiz
+	created              bool
+	showed               bool
+	updated              bool
 }
 
 func (suite *AssessmentRepoTestSuite) SetupSuite() {
@@ -133,20 +136,23 @@ func (suite *AssessmentRepoTestSuite) BeforeTest(suiteName, testName string) {
 
 func (suite *AssessmentRepoTestSuite) AfterTest(_, testName string) {
 	t := suite.T()
-	t.Run("delete assessment", func(t *testing.T) {
-		repository := repository.NewAssessmentRepository(suite.conn)
-		suite.assessmentRepository = repository
 
-		id, err := entity.NewInputID(suite.assessment.ID)
-		assert.NoError(t, err)
+	if suite.created == true && suite.showed == true && suite.updated == true {
+		t.Run("delete assessment", func(t *testing.T) {
+			repository := repository.NewAssessmentRepository(suite.conn)
+			suite.assessmentRepository = repository
 
-		err = suite.assessmentRepository.Delete(id)
-		assert.NoError(t, err)
+			id, err := entity.NewInputID(suite.assessment.ID)
+			assert.NoError(t, err)
 
-		currentAssessment, err := suite.assessmentRepository.Show(id)
-		assert.Error(t, err)
-		assert.Nil(t, currentAssessment)
-	})
+			err = suite.assessmentRepository.Delete(id)
+			assert.NoError(t, err)
+
+			currentAssessment, err := suite.assessmentRepository.Show(id)
+			assert.Error(t, err)
+			assert.Nil(t, currentAssessment)
+		})
+	}
 }
 
 func (suite *AssessmentRepoTestSuite) TestCreateAssessment() {
@@ -183,6 +189,7 @@ func (suite *AssessmentRepoTestSuite) TestCreateAssessment() {
 
 	suite.assessment = assessment
 	suite.quiz = quiz
+	suite.created = true
 }
 
 func (suite *AssessmentRepoTestSuite) TestShowAssessment() {
@@ -202,6 +209,7 @@ func (suite *AssessmentRepoTestSuite) TestShowAssessment() {
 	assert.Equal(t, suite.assessment.StartDate, currentAssessment.StartDate.In(time.UTC))
 	assert.Equal(t, suite.assessment.EndDate, currentAssessment.EndDate.In(time.UTC))
 	assert.ElementsMatch(t, suite.assessment.Quiz, currentAssessment.Quiz)
+	suite.showed = true
 }
 
 func (suite *AssessmentRepoTestSuite) TestUpdateAssessment() {
@@ -243,6 +251,7 @@ func (suite *AssessmentRepoTestSuite) TestUpdateAssessment() {
 	assert.NotEqual(t, suite.assessment.StartDate, newAssessment.StartDate.In(time.UTC))
 	assert.NotEqual(t, suite.assessment.EndDate, newAssessment.EndDate.In(time.UTC))
 	assert.NotEqual(t, suite.assessment.Quiz, newAssessment.Quiz)
+	suite.updated = true
 }
 
 func TestAssessmentRepoTestSuite(t *testing.T) {
