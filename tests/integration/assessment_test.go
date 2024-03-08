@@ -131,7 +131,22 @@ func (suite *AssessmentRepoTestSuite) BeforeTest(suiteName, testName string) {
 	}
 }
 
-func (suite *AssessmentRepoTestSuite) AfterTest(_, _ string) {
+func (suite *AssessmentRepoTestSuite) AfterTest(_, testName string) {
+	t := suite.T()
+	t.Run("delete assessment", func(t *testing.T) {
+		repository := repository.NewAssessmentRepository(suite.conn)
+		suite.assessmentRepository = repository
+
+		id, err := entity.NewInputID(suite.assessment.ID)
+		assert.NoError(t, err)
+
+		err = suite.assessmentRepository.Delete(id)
+		assert.NoError(t, err)
+
+		currentAssessment, err := suite.assessmentRepository.Show(id)
+		assert.Error(t, err)
+		assert.Nil(t, currentAssessment)
+	})
 }
 
 func (suite *AssessmentRepoTestSuite) TestCreateAssessment() {
