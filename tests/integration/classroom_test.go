@@ -118,6 +118,7 @@ func (suite *ClassroomRepoTestSuite) TestCreateClassroom() {
 	assert.NoError(t, err)
 
 	suite.course = course.ID
+	suite.created = true
 }
 
 func (suite *ClassroomRepoTestSuite) TestShowClassroom() {
@@ -129,6 +130,7 @@ func (suite *ClassroomRepoTestSuite) TestShowClassroom() {
 	assert.Equal(t, "Name", currentClassroom.Name)
 	assert.Equal(t, "Description", currentClassroom.Description)
 	assert.Equal(t, suite.course, currentClassroom.Course)
+	suite.showed = true
 }
 
 func (suite *ClassroomRepoTestSuite) TestUpdateClassroom() {
@@ -149,6 +151,7 @@ func (suite *ClassroomRepoTestSuite) TestUpdateClassroom() {
 	assert.NotEqual(t, "Name", newClassroom.Name)
 	assert.NotEqual(t, "Description", newClassroom.Description)
 	assert.Equal(t, suite.course, newClassroom.Course)
+	suite.updated = true
 }
 
 func TestClassroomRepoTestSuite(t *testing.T) {
