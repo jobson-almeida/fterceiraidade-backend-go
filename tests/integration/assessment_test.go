@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/entity"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
@@ -19,15 +20,18 @@ import (
 
 type AssessmentRepoTestSuite struct {
 	suite.Suite
-	container           *testhelpers.DatabaseContainer
-	ctx                 context.Context
-	conn                *gorm.DB
-	courseRepository    *repository.CourseRepository
-	classroomRepository *repository.ClassroomRepository
-	questionRepository  *repository.QuestionRepository
-	course              string
-
-	// assessment *entity.InputID
+	container            *testhelpers.DatabaseContainer
+	ctx                  context.Context
+	conn                 *gorm.DB
+	courseRepository     *repository.CourseRepository
+	classroomRepository  *repository.ClassroomRepository
+	questionRepository   *repository.QuestionRepository
+	assessmentRepository *repository.AssessmentRepository
+	course               string
+	classroom            *entity.Classroom
+	question             *entity.Question
+	assessment           *entity.Assessment
+	quiz                 []*entity.Quiz
 	// created    bool
 	// showed     bool
 	// updated    bool
@@ -97,6 +101,7 @@ func (suite *AssessmentRepoTestSuite) BeforeTest(suiteName, testName string) {
 			err = suite.classroomRepository.Create(classroom)
 			assert.NoError(t, err)
 			assert.NotNil(t, classroom)
+			suite.classroom = classroom
 		})
 
 		t.Run("create question", func(t *testing.T) {
@@ -124,6 +129,7 @@ func (suite *AssessmentRepoTestSuite) BeforeTest(suiteName, testName string) {
 			err = suite.questionRepository.Create(question)
 			assert.NoError(t, err)
 			assert.NotNil(t, question)
+			suite.question = question
 		})
 	}
 }
@@ -132,6 +138,39 @@ func (suite *AssessmentRepoTestSuite) AfterTest(_, _ string) {
 }
 
 func (suite *AssessmentRepoTestSuite) TestCreateAssessment() {
+	t := suite.T()
+	repository := repository.NewAssessmentRepository(suite.conn)
+	suite.assessmentRepository = repository
+
+	var quiz []*entity.Quiz
+	quiz = append(quiz, &entity.Quiz{
+		ID:    suite.question.ID,
+		Value: 1,
+	})
+	courses := pq.StringArray{suite.course}
+	classrooms := pq.StringArray{suite.classroom.ID}
+
+	startDate, _ := time.Parse(time.DateOnly, "2024-01-01")
+	endDate, _ := time.Parse(time.DateOnly, "2024-01-01")
+
+	assessment, err := entity.NewAssessment(
+		"Description",
+		courses,
+		classrooms,
+		startDate,
+		endDate,
+		quiz,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.assessmentRepository.Create(assessment)
+	assert.NoError(t, err)
+	assert.NotNil(t, assessment)
+
+	suite.assessment = assessment
+	suite.quiz = quiz
 }
 
 func TestAssessmentRepoTestSuite(t *testing.T) {
