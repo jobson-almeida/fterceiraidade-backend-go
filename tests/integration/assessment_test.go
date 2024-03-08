@@ -173,6 +173,25 @@ func (suite *AssessmentRepoTestSuite) TestCreateAssessment() {
 	suite.quiz = quiz
 }
 
+func (suite *AssessmentRepoTestSuite) TestShowAssessment() {
+	t := suite.T()
+	repository := repository.NewAssessmentRepository(suite.conn)
+	suite.assessmentRepository = repository
+
+	id, err := entity.NewInputID(suite.assessment.ID)
+	assert.NoError(t, err)
+
+	currentAssessment, err := suite.assessmentRepository.Show(id)
+	assert.NoError(t, err)
+	assert.NotNil(t, currentAssessment)
+	assert.Equal(t, "Description", currentAssessment.Description)
+	assert.ElementsMatch(t, suite.assessment.Courses, currentAssessment.Courses)
+	assert.ElementsMatch(t, suite.assessment.Classrooms, currentAssessment.Classrooms)
+	assert.Equal(t, suite.assessment.StartDate, currentAssessment.StartDate.In(time.UTC))
+	assert.Equal(t, suite.assessment.EndDate, currentAssessment.EndDate.In(time.UTC))
+	assert.ElementsMatch(t, suite.assessment.Quiz, currentAssessment.Quiz)
+}
+
 func TestAssessmentRepoTestSuite(t *testing.T) {
 	suite.Run(t, new(AssessmentRepoTestSuite))
 }
