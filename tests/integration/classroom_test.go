@@ -23,9 +23,9 @@ type ClassroomRepoTestSuite struct {
 	ctx        context.Context
 	course     string
 	classroom  *entity.InputID
-	// created    bool
-	// showed     bool
-	// updated    bool
+	created    bool
+	showed     bool
+	updated    bool
 }
 
 func (suite *ClassroomRepoTestSuite) SetupSuite() {
@@ -60,6 +60,33 @@ func (suite *ClassroomRepoTestSuite) TearDownSuite() {
 }
 
 func (suite *ClassroomRepoTestSuite) AfterTest(_, _ string) {
+	if suite.created == true && suite.showed == true && suite.updated == true {
+		t := suite.T()
+		t.Run("delete classroom", func(t *testing.T) {
+			classroom, err := entity.NewClassroom(
+				"Other Name",
+				"Other Description",
+				suite.course,
+			)
+			if err != nil {
+				panic(err.Error())
+			}
+
+			err = suite.repository.Create(classroom)
+			assert.NoError(t, err)
+			assert.NotNil(t, classroom.ID)
+
+			id, err := entity.NewInputID(classroom.ID)
+			assert.NoError(t, err)
+
+			err = suite.repository.Delete(id)
+			assert.NoError(t, err)
+
+			currentClassroom, err := suite.repository.Show(id)
+			assert.Error(t, err)
+			assert.Nil(t, currentClassroom)
+		})
+	}
 }
 
 func (suite *ClassroomRepoTestSuite) TestCreateClassroom() {
@@ -102,6 +129,26 @@ func (suite *ClassroomRepoTestSuite) TestShowClassroom() {
 	assert.Equal(t, "Name", currentClassroom.Name)
 	assert.Equal(t, "Description", currentClassroom.Description)
 	assert.Equal(t, suite.course, currentClassroom.Course)
+}
+
+func (suite *ClassroomRepoTestSuite) TestUpdateClassroom() {
+	t := suite.T()
+
+	newClassroom, err := entity.UpdateClassroom(
+		"New Name",
+		"New Description",
+		suite.course,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	err = suite.repository.Update(suite.classroom, newClassroom)
+	assert.NoError(t, err)
+	assert.NotNil(t, newClassroom)
+	assert.NotEqual(t, "Name", newClassroom.Name)
+	assert.NotEqual(t, "Description", newClassroom.Description)
+	assert.Equal(t, suite.course, newClassroom.Course)
 }
 
 func TestClassroomRepoTestSuite(t *testing.T) {
