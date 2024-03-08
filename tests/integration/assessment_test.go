@@ -10,6 +10,7 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/tests/testhelpers"
 	"github.com/joho/godotenv"
+	"github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	pg "gorm.io/driver/postgres"
@@ -23,6 +24,7 @@ type AssessmentRepoTestSuite struct {
 	conn                *gorm.DB
 	courseRepository    *repository.CourseRepository
 	classroomRepository *repository.ClassroomRepository
+	questionRepository  *repository.QuestionRepository
 	course              string
 
 	// assessment *entity.InputID
@@ -95,6 +97,33 @@ func (suite *AssessmentRepoTestSuite) BeforeTest(suiteName, testName string) {
 			err = suite.classroomRepository.Create(classroom)
 			assert.NoError(t, err)
 			assert.NotNil(t, classroom)
+		})
+
+		t.Run("create question", func(t *testing.T) {
+			repository := repository.NewQuestionRepository(suite.conn)
+			suite.questionRepository = repository
+
+			var str_img = "/image/image.png"
+			image := &str_img
+			var str_answer = "Answer"
+			answer := &str_answer
+			alternatives := pq.StringArray{"(a) alternative a", "(b) alternative b", "(c) alternative c"}
+
+			question, err := entity.NewQuestion(
+				"Questioning",
+				"Type",
+				image,
+				alternatives,
+				answer,
+				"Discipline",
+			)
+			if err != nil {
+				panic(err.Error())
+			}
+
+			err = suite.questionRepository.Create(question)
+			assert.NoError(t, err)
+			assert.NotNil(t, question)
 		})
 	}
 }
