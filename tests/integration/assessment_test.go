@@ -18,11 +18,12 @@ import (
 
 type AssessmentRepoTestSuite struct {
 	suite.Suite
-	container        *testhelpers.DatabaseContainer
-	ctx              context.Context
-	conn             *gorm.DB
-	courseRepository *repository.CourseRepository
-	course           string
+	container           *testhelpers.DatabaseContainer
+	ctx                 context.Context
+	conn                *gorm.DB
+	courseRepository    *repository.CourseRepository
+	classroomRepository *repository.ClassroomRepository
+	course              string
 
 	// assessment *entity.InputID
 	// created    bool
@@ -76,6 +77,24 @@ func (suite *AssessmentRepoTestSuite) BeforeTest(suiteName, testName string) {
 			err = suite.courseRepository.Create(course)
 			assert.NoError(t, err)
 			assert.NotNil(t, course)
+		})
+
+		t.Run("create classroom", func(t *testing.T) {
+			repository := repository.NewClassroomRepository(suite.conn)
+			suite.classroomRepository = repository
+
+			classroom, err := entity.NewClassroom(
+				"Name",
+				"Description",
+				suite.course,
+			)
+			if err != nil {
+				panic(err.Error())
+			}
+
+			err = suite.classroomRepository.Create(classroom)
+			assert.NoError(t, err)
+			assert.NotNil(t, classroom)
 		})
 	}
 }
