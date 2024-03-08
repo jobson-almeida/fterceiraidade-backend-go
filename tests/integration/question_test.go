@@ -22,10 +22,10 @@ type QuestionRepoTestSuite struct {
 	container  *testhelpers.DatabaseContainer
 	repository *repository.QuestionRepository
 	ctx        context.Context
-	question   *entity.InputID
+	question   *entity.Question
 	created    bool
-	//showed     bool
-	//updated    bool
+	showed     bool
+	// updated    bool
 }
 
 func (suite *QuestionRepoTestSuite) SetupSuite() {
@@ -87,9 +87,26 @@ func (suite *QuestionRepoTestSuite) TestCreateQuestion() {
 	assert.NoError(t, err)
 	assert.NotNil(t, question)
 
-	suite.question, err = entity.NewInputID(question.ID)
-	assert.NoError(t, err)
+	suite.question = question
 	suite.created = true
+}
+
+func (suite *QuestionRepoTestSuite) TestShowQuestion() {
+	t := suite.T()
+
+	id, err := entity.NewInputID(suite.question.ID)
+	assert.NoError(t, err)
+
+	currentQuestion, err := suite.repository.Show(id)
+	assert.NoError(t, err)
+	assert.NotNil(t, currentQuestion)
+	assert.Equal(t, suite.question.Questioning, currentQuestion.Questioning)
+	assert.Equal(t, suite.question.Type, currentQuestion.Type)
+	assert.Equal(t, suite.question.Image, currentQuestion.Image)
+	assert.ElementsMatch(t, suite.question.Alternatives, currentQuestion.Alternatives)
+	assert.Equal(t, suite.question.Answer, currentQuestion.Answer)
+	assert.Equal(t, suite.question.Discipline, currentQuestion.Discipline)
+	suite.showed = true
 }
 
 func TestQuestionRepoTestSuite(t *testing.T) {
