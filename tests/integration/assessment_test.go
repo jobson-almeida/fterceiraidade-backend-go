@@ -32,9 +32,6 @@ type AssessmentRepoTestSuite struct {
 	question             *entity.Question
 	assessment           *entity.Assessment
 	quiz                 []*entity.Quiz
-	// created    bool
-	// showed     bool
-	// updated    bool
 }
 
 func (suite *AssessmentRepoTestSuite) SetupSuite() {
@@ -190,6 +187,47 @@ func (suite *AssessmentRepoTestSuite) TestShowAssessment() {
 	assert.Equal(t, suite.assessment.StartDate, currentAssessment.StartDate.In(time.UTC))
 	assert.Equal(t, suite.assessment.EndDate, currentAssessment.EndDate.In(time.UTC))
 	assert.ElementsMatch(t, suite.assessment.Quiz, currentAssessment.Quiz)
+}
+
+func (suite *AssessmentRepoTestSuite) TestUpdateAssessment() {
+	t := suite.T()
+	repository := repository.NewAssessmentRepository(suite.conn)
+	suite.assessmentRepository = repository
+
+	var quiz []*entity.Quiz
+	quiz = append(quiz, &entity.Quiz{
+		ID:    suite.question.ID,
+		Value: 10,
+	})
+	courses := pq.StringArray{suite.course}
+	classrooms := pq.StringArray{suite.classroom.ID}
+
+	startDate, _ := time.Parse(time.DateOnly, "2024-01-02")
+	endDate, _ := time.Parse(time.DateOnly, "2024-01-02")
+
+	newAssessment, err := entity.UpdateAssessment(
+		"New Description",
+		courses,
+		classrooms,
+		startDate,
+		endDate,
+		quiz,
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	id, err := entity.NewInputID(suite.assessment.ID)
+	assert.NoError(t, err)
+
+	err = suite.assessmentRepository.Update(id, newAssessment)
+	assert.NoError(t, err)
+	assert.NotEqual(t, "Description", newAssessment.Description)
+	assert.ElementsMatch(t, suite.assessment.Courses, newAssessment.Courses)
+	assert.ElementsMatch(t, suite.assessment.Classrooms, newAssessment.Classrooms)
+	assert.NotEqual(t, suite.assessment.StartDate, newAssessment.StartDate.In(time.UTC))
+	assert.NotEqual(t, suite.assessment.EndDate, newAssessment.EndDate.In(time.UTC))
+	assert.NotEqual(t, suite.assessment.Quiz, newAssessment.Quiz)
 }
 
 func TestAssessmentRepoTestSuite(t *testing.T) {
