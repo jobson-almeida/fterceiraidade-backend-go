@@ -19,7 +19,7 @@ type QuestionRepository struct {
 	db *gorm.DB
 }
 
-func NewQuestionRepository(db *gorm.DB) IQuestionRepository {
+func NewQuestionRepository(db *gorm.DB) *QuestionRepository {
 	return &QuestionRepository{db: db}
 }
 
