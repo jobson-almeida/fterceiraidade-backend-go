@@ -20,7 +20,7 @@ type AssessmentRepository struct {
 	db *gorm.DB
 }
 
-func NewAssessmentRepository(db *gorm.DB) IAssessmentRepository {
+func NewAssessmentRepository(db *gorm.DB) *AssessmentRepository {
 	return &AssessmentRepository{db: db}
 }
 
