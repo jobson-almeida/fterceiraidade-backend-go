@@ -10,6 +10,7 @@ import (
 	"github.com/jobson-almeida/fterceiraidade-backend-go/internal/repository"
 	"github.com/jobson-almeida/fterceiraidade-backend-go/tests/testhelpers"
 	"github.com/joho/godotenv"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	pg "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,13 +18,16 @@ import (
 
 type AssessmentRepoTestSuite struct {
 	suite.Suite
-	container  *testhelpers.DatabaseContainer
-	repository *repository.AssessmentRepository
-	ctx        context.Context
-	assessment *entity.InputID
-	created    bool
-	showed     bool
-	updated    bool
+	container        *testhelpers.DatabaseContainer
+	ctx              context.Context
+	conn             *gorm.DB
+	courseRepository *repository.CourseRepository
+	course           string
+
+	// assessment *entity.InputID
+	// created    bool
+	// showed     bool
+	// updated    bool
 }
 
 func (suite *AssessmentRepoTestSuite) SetupSuite() {
@@ -39,16 +43,10 @@ func (suite *AssessmentRepoTestSuite) SetupSuite() {
 		panic(err.Error())
 	}
 	dialect := os.Getenv("DIALECT")
-	conn, err := gorm.Open(pg.New(pg.Config{DriverName: dialect, DSN: suite.container.ConnectionString}))
+	suite.conn, err = gorm.Open(pg.New(pg.Config{DriverName: dialect, DSN: suite.container.ConnectionString}))
 	if err != nil {
 		panic(err.Error())
 	}
-	repository := repository.NewAssessmentRepository(conn)
-
-	conn.AutoMigrate(
-		entity.Assessment{},
-	)
-	suite.repository = repository
 }
 
 func (suite *AssessmentRepoTestSuite) TearDownSuite() {
@@ -57,7 +55,35 @@ func (suite *AssessmentRepoTestSuite) TearDownSuite() {
 	}
 }
 
+func (suite *AssessmentRepoTestSuite) BeforeTest(suiteName, testName string) {
+	t := suite.T()
+
+	if testName == "TestCreateAssessment" {
+		t.Run("create course", func(t *testing.T) {
+			repository := repository.NewCourseRepository(suite.conn)
+			suite.courseRepository = repository
+
+			course, err := entity.NewCourse(
+				"Name",
+				"Description",
+				"/image/image.png",
+			)
+			if err != nil {
+				panic(err.Error())
+			}
+			suite.course = course.ID
+
+			err = suite.courseRepository.Create(course)
+			assert.NoError(t, err)
+			assert.NotNil(t, course)
+		})
+	}
+}
+
 func (suite *AssessmentRepoTestSuite) AfterTest(_, _ string) {
+}
+
+func (suite *AssessmentRepoTestSuite) TestCreateAssessment() {
 }
 
 func TestAssessmentRepoTestSuite(t *testing.T) {
