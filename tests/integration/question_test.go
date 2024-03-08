@@ -25,7 +25,7 @@ type QuestionRepoTestSuite struct {
 	question   *entity.Question
 	created    bool
 	showed     bool
-	// updated    bool
+	updated    bool
 }
 
 func (suite *QuestionRepoTestSuite) SetupSuite() {
@@ -60,6 +60,20 @@ func (suite *QuestionRepoTestSuite) TearDownSuite() {
 }
 
 func (suite *QuestionRepoTestSuite) AfterTest(_, _ string) {
+	if suite.created == true && suite.showed == true && suite.updated == true {
+		t := suite.T()
+		t.Run("delete question", func(t *testing.T) {
+			id, err := entity.NewInputID(suite.question.ID)
+			assert.NoError(t, err)
+
+			err = suite.repository.Delete(id)
+			assert.NoError(t, err)
+
+			currentQuestion, err := suite.repository.Show(id)
+			assert.Error(t, err)
+			assert.Nil(t, currentQuestion)
+		})
+	}
 }
 
 func (suite *QuestionRepoTestSuite) TestCreateQuestion() {
@@ -107,6 +121,42 @@ func (suite *QuestionRepoTestSuite) TestShowQuestion() {
 	assert.Equal(t, suite.question.Answer, currentQuestion.Answer)
 	assert.Equal(t, suite.question.Discipline, currentQuestion.Discipline)
 	suite.showed = true
+}
+
+func (suite *QuestionRepoTestSuite) TestUpdateQuestion() {
+	t := suite.T()
+
+	var str_img = "/image/new_image.png"
+	image := &str_img
+	var str_answer = "New Answer"
+	answer := &str_answer
+	alternatives := pq.StringArray{"(d) alternative d", "(e) alternative e", "(f) alternative f"}
+
+	newQuestion, err := entity.NewQuestion(
+		"New Questioning",
+		"New Type",
+		image,
+		alternatives,
+		answer,
+		"New Discipline",
+	)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	id, err := entity.NewInputID(suite.question.ID)
+	assert.NoError(t, err)
+
+	err = suite.repository.Update(id, newQuestion)
+	assert.NoError(t, err)
+	assert.NotNil(t, newQuestion)
+	assert.NotEqual(t, suite.question.Questioning, newQuestion.Questioning)
+	assert.NotEqual(t, suite.question.Type, newQuestion.Type)
+	assert.NotEqual(t, suite.question.Image, newQuestion.Image)
+	assert.NotEqual(t, suite.question.Alternatives, newQuestion.Alternatives)
+	assert.NotEqual(t, suite.question.Answer, newQuestion.Answer)
+	assert.NotEqual(t, suite.question.Discipline, newQuestion.Discipline)
+	suite.updated = true
 }
 
 func TestQuestionRepoTestSuite(t *testing.T) {
