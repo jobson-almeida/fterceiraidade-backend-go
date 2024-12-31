@@ -1,6 +1,6 @@
 module github.com/jobson-almeida/fterceiraidade-backend-go
 
-go 1.21.6
+go 1.23.4
 
 require (
 	github.com/go-chi/chi v1.5.5
