@@ -64,5 +64,5 @@ func main() {
 
 	r := routes.Router(courseHandlers, studentHandlers, teacherHandlers, questionHandlers, classroomHandlers, assessmentHandlers)
 
-	http.ListenAndServe(":8888", r)
+	http.ListenAndServe(":5000", r)
 }
