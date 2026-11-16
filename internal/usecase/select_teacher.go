@@ -29,6 +29,7 @@ func (s *SelectTeachers) Execute() ([]*dto.TeacherOutput, error) {
 			Email:     r.Email,
 			Phone:     r.Phone,
 			Address:   dto.DetailsAddress{City: r.Address.City, State: r.Address.State, Street: r.Address.Street},
+			CreatedAt: r.CreatedAt.Format("02/01/2006"),
 		})
 	}
 	return output, nil

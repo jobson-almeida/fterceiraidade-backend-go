@@ -27,4 +27,5 @@ type TeacherOutput struct {
 	Email     string         `json:"email"`
 	Phone     string         `json:"phone"`
 	Address   DetailsAddress `json:"address"`
+	CreatedAt string         `json:"createdAt"`
 }
