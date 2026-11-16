@@ -14,6 +14,7 @@ func Router(
 	questionHandlers handler.IQuestionHandlers,
 	classroomHandlers handler.IClassroomHandlers,
 	assessmentHandlers handler.IAssessmentHandlers,
+	chartDataHandlers handler.IChartDataHandlers,
 ) *chi.Mux {
 	r := chi.NewRouter()
 
@@ -85,6 +86,10 @@ func Router(
 			r.Put("/", assessmentHandlers.UpdateAssessmentHandler)
 			r.Delete("/", assessmentHandlers.DeleteAssessmentHandler)
 		})
+	})
+
+	r.Route("/chart_data", func(r chi.Router) {
+		r.Get("/", chartDataHandlers.SelectChartDatasHandler)
 	})
 
 	return r
