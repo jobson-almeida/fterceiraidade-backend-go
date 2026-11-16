@@ -62,7 +62,11 @@ func main() {
 	deleteAssessment := usecase.NewDeleteAssessment(repositoryAssessment)
 	assessmentHandlers := handler.NewAssessmentHandlers(createAssessment, selectAssessments, showAssessment, updateAssessment, deleteAssessment, showCourse, showClassroom)
 
-	r := routes.Router(courseHandlers, studentHandlers, teacherHandlers, questionHandlers, classroomHandlers, assessmentHandlers)
+	repositoryChartData := repository.NewChartDataRepository(&db)
+	selectChartData := usecase.NewSelectChartData(repositoryChartData)
+	chartDataHandlers := handler.NewChartDataHandlers(selectChartData)
+
+	r := routes.Router(courseHandlers, studentHandlers, teacherHandlers, questionHandlers, classroomHandlers, assessmentHandlers, chartDataHandlers)
 
 	http.ListenAndServe(":5000", r)
 }
