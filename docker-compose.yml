@@ -1,16 +1,20 @@
-version: '3'
-
 services:
-  database:
-    image: bitnami/postgresql:latest
-    ports:
-      - "5432:5432"
+ database:
+    image: postgres:17-alpine
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=fterceiraidade_backend_go
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "127.0.0.1:5432:5432"
     volumes:
-      - postgres:/bitnami/postgresql
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
 
 volumes:
-  postgres:
+  postgres_data:
