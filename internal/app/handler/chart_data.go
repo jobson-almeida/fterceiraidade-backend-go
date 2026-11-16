@@ -16,6 +16,12 @@ type IChartDataHandlers interface {
 	SelectChartDatasHandler(w http.ResponseWriter, r *http.Request)
 }
 
+func NewChartDataHandlers(selectChartData *usecase.SelectChartData) IChartDataHandlers {
+	return &ChartDataHandlers{
+		SelectChartData: selectChartData,
+	}
+}
+
 func (c *ChartDataHandlers) SelectChartDatasHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
