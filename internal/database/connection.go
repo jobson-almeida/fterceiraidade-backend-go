@@ -32,6 +32,7 @@ func Connection() *gorm.DB {
 		entity.Assessment{},
 		entity.Classroom{},
 		entity.Question{},
+		entity.ChartData{},
 	)
 
 	return conn
