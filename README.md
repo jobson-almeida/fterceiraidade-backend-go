@@ -1,79 +1,80 @@
-## FTerceiraIdade 
-&nbsp;
-### Description
+# FTerCeiraIdade Backend
 
-Estudo de backend em GO, que tem como proposta gerenciar os dados referentes aos usuários do sistema (professores e estudantes), aos cursos e turmas a eles relacionados. Por fim, gerir questões individualmente definidas que poderão ser utilizadas em um processo de avaliações personalizáveis. Uma API opcional em suporte ao frontend FTerceiraIdade - https://github.com/jobson-almeida/fterceiraidade-frontend.
+API REST em Go para apoiar o frontend FTerceiraIdade no gerenciamento de estudantes, professores, cursos, turmas, questões e avaliações. O projeto usa PostgreSQL para persistência e oferece um endpoint provisório para demonstrar gráficos no frontend.
 
+## Funcionalidades
 
-&nbsp;
+- Criar, consultar, atualizar e remover estudantes, professores, cursos, turmas, questões e avaliações.
+- Consultar dados de demonstração para gráficos pelo endpoint `/chart_data/`.
 
-### Linguagens e Ferramentas
+### Limitação do endpoint de gráficos
 
+O endpoint `GET /chart_data/` é um recurso provisório. Suas regras de negócio ainda não foram definidas e os valores são fixos, usados somente para demonstrar os gráficos no frontend. Para esse objetivo atual, o recurso cumpre seu propósito; os dados não devem ser considerados resultados de regras de negócio consolidadas.
 
-<p>  
-    <a
-    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-    target="_blank"
-    rel="noreferrer"
-  >
-    <img    
-      src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original-wordmark.svg"
-      alt="javascript"
-      title="javascript"
-      width="40"
-      height="40"
-    />
-  </a>
-  &nbsp;
-  <a href="https://www.docker.com/" target="_blank" rel="noreferrer">
-    <img src="https://cdn.worldvectorlogo.com/logos/docker-4.svg" alt="docker" title="docker" width="40" height="40" />
-  </a>
-  &nbsp;
-  <a href="https://www.postgresql.org/" target="_blank" rel="noreferrer">
-    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-plain.svg" alt="postgres" title="postgres" width="40" height="40" />
-  </a>
-</p>
- 
-&nbsp;
+## Tecnologias
 
-### Instalar dependências
+- Go 1.27.4
+- PostgreSQL 17
+- Chi e GORM
+- Docker Compose
 
-```dosini
-go mod tidy
-```
-&nbsp;
+## Pré-requisitos
 
-### Criação do arquivo .env e variavéis
+- Go 1.27.4
+- Docker com Docker Compose
 
-```dosini
-DIALECT=postgres
-CONNECTION="postgres://postgres:postgres@localhost/fterceiraidade_backend_go?sslmode=disable"
+## Configuração e execução
+
+Na raiz do projeto, copie o arquivo de exemplo e preencha as configurações locais:
+
+```sh
+cp .env.example .env
 ```
 
-&nbsp;
+Configure `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_DB`. Atualize `CONNECTION` com os mesmos valores de usuário, senha e banco; `DIALECT` deve permanecer como `postgres`. O arquivo `.env` contém configurações locais e não deve ser versionado.
 
-### Criar e executar o container do banco de dados
+Baixe as dependências:
 
-```dosini
-docker compose up
-```
-&nbsp;
-
-### Executar os endpoints da aplicação
-Utilize o arquivo test.http (Rest Client) presente na raiz do projeto ou outra plataforma de sua preferência. Endpoints de exemplos estão contidos no arquivo.
-
-&nbsp;
-
-### Opcional 
-Caso tenha interesse em usar o frontend FTerceiraIdade deverá configurá-lo editando a API_URL_BASE do arquivo .env.local, alterando a porta para 8888.
-
-```dosini
-API_URL_BASE=http://localhost:8888
+```sh
+go mod download
 ```
 
-&nbsp;
-&nbsp;
+Inicie o PostgreSQL:
 
----
+```sh
+docker compose up -d database
+```
 
-developed by Jobson Almeida
+Quando o banco estiver pronto, inicie a API em outro terminal:
+
+```sh
+go run ./cmd
+```
+
+A API ficará disponível em `http://localhost:5000`. Para parar a API, use `Ctrl+C`; para parar o banco sem remover os dados persistidos, execute:
+
+```sh
+docker compose down
+```
+
+## API
+
+Os recursos `/courses`, `/students`, `/teachers`, `/questions`, `/classrooms` e `/assessments` oferecem operações de consulta e criação na coleção, além de consulta, atualização e remoção por identificador.
+
+Para consultar os dados de demonstração dos gráficos:
+
+```sh
+curl http://localhost:5000/chart_data/
+```
+
+## Frontend
+
+O frontend relacionado está disponível em [jobson-almeida/fterceiraidade-frontend](https://github.com/jobson-almeida/fterceiraidade-frontend). Para apontá-lo para esta API local, configure no arquivo `.env.local` do frontend:
+
+```env
+API_URL_BASE=http://localhost:5000
+```
+
+## Créditos
+
+Desenvolvido por Jobson Almeida.
